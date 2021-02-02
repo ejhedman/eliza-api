@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./lib",
+        "strict": true
+    },
+    "include": [
+        "src"
+, "static/swagger-ui-dist"    ],
+    "exclude": [
+        "node_modules",
+        "**/test/*"
+    ]
+}

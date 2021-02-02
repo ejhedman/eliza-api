@@ -1,0 +1,1891 @@
+openapi: '3.0.2'
+
+servers:
+  - url: 'https://hedbot.uc.r.appspot.com/eliza/api/'
+    description: Development Server
+
+info:
+  title: Eliza API
+  version: '1.0'
+  description: |
+    Supports control and retrieval over Eliza programs by Elli
+
+    # Introduction
+    This API is documented in **OpenAPI format**
+    It is **extended** to support features of [ReDoc](https://github.com/Redocly/redoc) documentation.
+
+    # Authentication
+
+    The Eliza REST API supports HTTP Bearer (JWT)  Authentication as described in [spec] (https://deadlink.hms.com/)
+
+    For this sample, use the JWT Token displayed when you click the "Authorize" button. Cut/past into the
+    value field and the token will be used for subsequent calls. **All** of the API calls require authentication/authorization.
+
+tags:
+
+- name: CRITICAL PHMi MVP Reporting
+  description:
+    Resources that are strictly REQUIRED for the Eliza/Elli MVP Integration
+
+- name: PHMi MVP Reporting
+  description:
+    Resources that are secondary for the Eliza/Elli MVP Integration
+
+- name: Navigation
+  description:
+    (OPTIONAL for MVP) Resources that are available to list, browse, search, navigate data
+
+
+- name: PHMi MVP Ingestion
+  description:
+    Resources that are strictly REQUIRED for the Eliza/Elli MVP Integration
+
+- name: Future
+  description:
+    (TBD in the future)
+
+components:
+
+  schemas:
+
+    ##############################################################
+    # Static Resources
+    ##############################################################
+    ClientDef:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        id:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        _embedded:
+          type: object
+          properties:
+            programs:
+              type: array
+              items:
+                $ref: '#/components/schemas/ResourceRef'
+
+    ProgramDef:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            solution:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        isTransactional:
+          type: boolean
+        _embedded:
+          type: object
+          properties:
+            programOutreaches:
+              type: array
+              items:
+                $ref: '#/components/schemas/ResourceRef'
+
+    OutreachDef:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            solution:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        channelType:
+          type: string
+          enum:
+            - IVR
+            - CALL
+            - EMAIL
+            - SMS
+            - LIVECALLER
+            - LIVECALLERX
+            - WEBFORM
+
+    ProgramBatch:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            members:
+              $ref: '#/components/schemas/Link'
+            programOutreaches:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        createdAt:
+          type: string
+        batchXid:
+          type: string
+
+    ProgramEnrollmentSummary:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            batch:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+
+        receivedAt:
+          type: string
+        startedAt:
+          type: string
+        lastContactAt:
+          type: string
+        completedAt:
+          type: string
+        scubStatus:
+          type: string
+        scrubReason:
+          type: string
+        excluded:
+          type: boolean
+        excludedAt:
+          type: string
+
+        transactionXid:
+          type: string
+        memberXid:
+          type: string
+        groupXid:
+          type: string
+        batchXid:
+          type: string
+        firstName:
+          type: string
+          x-pii: true
+        lastName:
+          type: string
+          x-pii: true
+        dob:
+          type: string
+          x-pii: true
+        gender:
+          type: string
+          x-pii: true
+        preferredLanguage:
+          type: string
+          x-pii: true
+        email:
+          type: string
+          x-pii: true
+        primaryPhone:
+          type: string
+          x-pii: true
+        secondaryPhone:
+          type: string
+          x-pii: true
+        address1:
+          type: string
+          x-pii: true
+        address2:
+          type: string
+          x-pii: true
+        city:
+          type: string
+          x-pii: true
+        state:
+          type: string
+          x-pii: true
+        postalCode:
+          type: string
+          x-pii: true
+        lineOfBusiness:
+          type: string
+        allowedChannels:
+          type: object
+          properties:
+            telephone:
+              type: boolean
+            messaging:
+              type: boolean
+            email:
+              type: string
+        allowedContactDays:
+          type: object
+          properties:
+            monday:
+              type: boolean
+            tuesday:
+              type: boolean
+            wednesday:
+              type: boolean
+            thursday:
+              type: boolean
+            friday:
+              type: boolean
+            saturday:
+              type: boolean
+            sunday:
+              type: boolean
+        test:
+          type: boolean
+
+    ProgramEnrollment:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            batch:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+
+        receivedAt:
+          type: string
+        startedAt:
+          type: string
+        lastContactAt:
+          type: string
+        completedAt:
+          type: string
+        scubStatus:
+          type: string
+        scrubReason:
+          type: string
+        excluded:
+          type: boolean
+        excludedAt:
+          type: string
+
+        transactionXid:
+          type: string
+        memberXid:
+          type: string
+        groupXid:
+          type: string
+        batchXid:
+          type: string
+        firstName:
+          type: string
+          x-pii: true
+        lastName:
+          type: string
+          x-pii: true
+        dob:
+          type: string
+          x-pii: true
+        gender:
+          type: string
+          x-pii: true
+        preferredLanguage:
+          type: string
+          x-pii: true
+        email:
+          type: string
+          x-pii: true
+        primaryPhone:
+          type: string
+          x-pii: true
+        secondaryPhone:
+          type: string
+          x-pii: true
+        address1:
+          type: string
+          x-pii: true
+        address2:
+          type: string
+          x-pii: true
+        city:
+          type: string
+          x-pii: true
+        state:
+          type: string
+          x-pii: true
+        postalCode:
+          type: string
+          x-pii: true
+        lineOfBusiness:
+          type: string
+        allowedChannels:
+          type: object
+          properties:
+            telephone:
+              type: boolean
+            messaging:
+              type: boolean
+            email:
+              type: string
+        allowedContactDays:
+          type: object
+          properties:
+            monday:
+              type: boolean
+            tuesday:
+              type: boolean
+            wednesday:
+              type: boolean
+            thursday:
+              type: boolean
+            friday:
+              type: boolean
+            saturday:
+              type: boolean
+            sunday:
+              type: boolean
+        test:
+          type: boolean
+
+    OutreachSummary:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            outreachResults:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            batch:
+              $ref: '#/components/schemas/Association'
+            memberEnrollment:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+            outreach:
+              $ref: '#/components/schemas/Association'
+            lastBestOutreachResult:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        channel:
+          type: string
+        outreachStatus:
+          type: string
+          enum:
+            - ACTIVATED
+            - COMPLETED
+            - ERROR
+            - EXCLUDED
+            - EXPIRED
+            - INBOUND_ONLY
+            - UNGROUPED
+        firstAttemptAt:
+          type: string
+        lastAttemptAt:
+          type: string
+        attempts:
+          type: number
+        lastBestReault:
+          type: string
+        _embedded:
+          type: object
+          properties:
+            programOutreaches:
+              type: array
+              items:
+                $ref: '#/components/schemas/OutreachResultSummary'
+
+    OutreachDetail:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            batch:
+              $ref: '#/components/schemas/Association'
+            memberEnrollment:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+            outreach:
+              $ref: '#/components/schemas/Association'
+            lastBestOutreachResult:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        channel:
+          type: string
+        outreachStatus:
+          type: string
+          enum:
+            - ACTIVATED
+            - COMPLETED
+            - ERROR
+            - EXCLUDED
+            - EXPIRED
+            - INBOUND_ONLY
+            - UNGROUPED
+        firstAttemptAt:
+          type: string
+        lastAttemptAt:
+          type: string
+        attempts:
+          type: number
+        lastBestReault:
+          type: string
+        _embedded:
+          type: object
+          properties:
+            programOutreaches:
+              type: array
+              items:
+                $ref: '#/components/schemas/OutreachResultDetail'
+
+    OutreachResultDetail:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+            batch:
+              $ref: '#/components/schemas/Association'
+            memberEnrollment:
+              $ref: '#/components/schemas/Association'
+            program:
+              $ref: '#/components/schemas/Association'
+            outreach:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        channel:
+          type: string
+        outreachAt:
+          type: string
+        outreachResultCategory:
+          type: string
+          enum:
+            - REACHED
+            - TOUCHED
+            - NOT_TOUCHED
+        outreachResult:
+          type: string
+          enum:
+            - EXPIRED
+            - REJECTED
+            - MSG_DECLINED
+            - APP_COMPLETED
+            - EARLY_OPT_OUT
+            - IGNORE
+            - APP_DECLINED
+            - FORWARDED
+            - OUTBOUND_AGENT_MSG_HUMAN
+            - AMD_HANGUP
+            - FAX
+            - OBD_HANGUP
+            - CREATED
+            - DONT_CALL
+            - MSG_MACHINE
+            - APP_POSTPONED
+            - NO_CONTINUE
+            - CORRECT_PERSON
+            - OUTBOUND_AGENT_NOANSWER
+            - MSG_UNKNOWN
+            - FORMAT_ERROR
+            - BLOCKBOUNCE
+            - HARDBOUNCE
+            - NA
+            - CLICKED
+            - MSG_EXCEPTION
+            - DIAL_ERROR
+            - INBOUND_AGENT_MSG_HUMAN
+            - MSG_HUMAN
+            - INBOUND
+            - MSG_ERROR
+            - DISCONNECTED
+            - OPENED
+            - UNSUBSCRIBED
+            - AGENT_DNC
+            - SOFTBOUNCE
+            - OUTBOUND_AGENT_CORRECT_PERSON
+            - NO_PROMPT
+            - INBOUND_AGENT_HANGUP
+            - TONE
+            - OUTBOUND_AGENT_WRONGNUMBER
+            - PENDING
+            - TECHNICALBOUNCE
+            - NOTOPENED
+            - OUTBOUND_AGENT_HANGUP
+            - OUTBOUND_AGENT_DISCONNECTED
+            - INBOUND_AGENT_COMPLETE
+            - UNKNOWN
+            - UNKNOWNBOUNCE
+            - QUEUED
+            - OUTBOUND_AGENT_BUSY
+            - NO_ANSWER
+            - APP_INCOMPLETE
+            - WRONG_NUMBER
+            - BUSY
+            - APP_SPECIFIC
+            - NO_RESULT
+            - OUTBOUND_AGENT_MSG_MACHINE
+        isLastBest:
+          type: string
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutreachResponse'
+
+    OutreachResultSummary:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        id:
+          type: string
+        channel:
+          type: string
+        outreachAt:
+          type: string
+        outreachResult:
+          type: string
+          enum:
+            - EXPIRED
+            - REJECTED
+            - MSG_DECLINED
+            - APP_COMPLETED
+            - EARLY_OPT_OUT
+            - IGNORE
+            - APP_DECLINED
+            - FORWARDED
+            - OUTBOUND_AGENT_MSG_HUMAN
+            - AMD_HANGUP
+            - FAX
+            - OBD_HANGUP
+            - CREATED
+            - DONT_CALL
+            - MSG_MACHINE
+            - APP_POSTPONED
+            - NO_CONTINUE
+            - CORRECT_PERSON
+            - OUTBOUND_AGENT_NOANSWER
+            - MSG_UNKNOWN
+            - FORMAT_ERROR
+            - BLOCKBOUNCE
+            - HARDBOUNCE
+            - NA
+            - CLICKED
+            - MSG_EXCEPTION
+            - DIAL_ERROR
+            - INBOUND_AGENT_MSG_HUMAN
+            - MSG_HUMAN
+            - INBOUND
+            - MSG_ERROR
+            - DISCONNECTED
+            - OPENED
+            - UNSUBSCRIBED
+            - AGENT_DNC
+            - SOFTBOUNCE
+            - OUTBOUND_AGENT_CORRECT_PERSON
+            - NO_PROMPT
+            - INBOUND_AGENT_HANGUP
+            - TONE
+            - OUTBOUND_AGENT_WRONGNUMBER
+            - PENDING
+            - TECHNICALBOUNCE
+            - NOTOPENED
+            - OUTBOUND_AGENT_HANGUP
+            - OUTBOUND_AGENT_DISCONNECTED
+            - INBOUND_AGENT_COMPLETE
+            - UNKNOWN
+            - UNKNOWNBOUNCE
+            - QUEUED
+            - OUTBOUND_AGENT_BUSY
+            - NO_ANSWER
+            - APP_INCOMPLETE
+            - WRONG_NUMBER
+            - BUSY
+            - APP_SPECIFIC
+            - NO_RESULT
+            - OUTBOUND_AGENT_MSG_MACHINE
+        isLastBest:
+          type: string
+
+    MemberInfo:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            enrollments:
+              $ref: '#/components/schemas/Link'
+              description: Search for member engagements by member
+            outreaches:
+              $ref: '#/components/schemas/Link'
+            outreachResults:
+              $ref: '#/components/schemas/Link'
+        _associations:
+          type: object
+          properties:
+            client:
+              $ref: '#/components/schemas/Association'
+        id:
+          type: string
+        displayName:
+          type: string
+        memberXid:
+          type: string
+        firstName:
+          type: string
+          x-pii: true
+        lastName:
+          type: string
+          x-pii: true
+        dob:
+          type: string
+          x-pii: true
+        preferredLanguage:
+          type: string
+          x-pii: true
+        email:
+          type: string
+          x-pii: true
+        primaryPhone:
+          type: string
+          x-pii: true
+        secondaryPhone:
+          type: string
+          x-pii: true
+        address1:
+          type: string
+          x-pii: true
+        address2:
+          type: string
+          x-pii: true
+        city:
+          type: string
+          x-pii: true
+        state:
+          type: string
+          x-pii: true
+        postalCode:
+          type: string
+          x-pii: true
+      additionalProperties:
+        type: string
+
+    MemberInfoSubmission:
+      type: array
+      items:
+        type: object
+        properties:
+          transactionXid:
+            type: string
+          memberXid:
+            type: string
+          groupXid:
+            type: string
+          batchXid:
+            type: string
+          firstName:
+            type: string
+            x-pii: true
+          lastName:
+            type: string
+            x-pii: true
+          dob:
+            type: string
+            x-pii: true
+          gender:
+            type: string
+            x-pii: true
+          preferredLanguage:
+            type: string
+            x-pii: true
+          email:
+            type: string
+            x-pii: true
+          primaryPhone:
+            type: string
+            x-pii: true
+          secondaryPhone:
+            type: string
+            x-pii: true
+          address1:
+            type: string
+            x-pii: true
+          address2:
+            type: string
+            x-pii: true
+          city:
+            type: string
+            x-pii: true
+          state:
+            type: string
+            x-pii: true
+          postalCode:
+            type: string
+            x-pii: true
+          lineOfBusiness:
+            type: string
+          allowedChannels:
+            type: object
+            properties:
+              telephone:
+                type: boolean
+              messaging:
+                type: boolean
+              email:
+                type: string
+          allowedContactDays:
+            type: object
+            properties:
+              monday:
+                type: boolean
+              tuesday:
+                type: boolean
+              wednesday:
+                type: boolean
+              thursday:
+                type: boolean
+              friday:
+                type: boolean
+              saturday:
+                type: boolean
+              sunday:
+                type: boolean
+          test:
+            type: boolean
+        additionalProperties:
+          type: string
+
+    MemberInfoSubmissionResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          transactionXid:
+            type: string
+          memberXid:
+            type: string
+          dataRecordId:
+            type: string
+
+    MemberInfoSubmissionImportResponse:
+      type: object
+      properties:
+        submissionId:
+          type: string
+        rowsAccepted:
+          type: number
+
+    OutreachResponse:
+      type: object
+      properties:
+        ordinal:
+          type: number
+        questionCode:
+          type: string
+        answer:
+          type: string
+          x-phi: true
+        description:
+          type: string
+
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        rel:
+          type: string
+
+    Association:
+      type: object
+      properties:
+        href:
+          type: string
+        rel:
+          type: string
+        id:
+          type: string
+        displayName:
+          type: string
+
+    ResourceRef:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        id:
+          type: string
+        displayName:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        errorMessage:
+          type: string
+        errorDetail:
+          type: object
+
+  parameters:
+
+    #################################
+    # common embedded paramaters
+    #################################
+    clientId:
+      name: clientId
+      in: path
+      required: true
+      description:  Client Id (Eliza Internal)
+      schema:
+        type: string
+
+    programId:
+      name: programId
+      in: path
+      required: true
+      description:  Program Id
+      schema:
+        type: string
+
+    outreachId:
+      name: outreachId
+      in: path
+      required: true
+      description:  Outreach Id
+      schema:
+        type: string
+
+    exportId:
+      name: exportId
+      in: path
+      required: true
+      description:  Export Id
+      schema:
+        type: string
+
+    dataRecordId:
+      name: dataRecordId
+      in: path
+      required: true
+      description:  Internal Data Record Id (Eliza Internal)
+      schema:
+        type: string
+
+    #################################
+    # optional querystring paramaters
+    #################################
+    memberXid:
+      name: memberXid
+      in: query
+      description:  Member Id (Client External)
+      schema:
+        type: string
+
+    transactionXid:
+      name: transactionXid
+      in: query
+      description:  External Transaction Id (Client External)
+      schema:
+        type: string
+
+    groupXid:
+      name: groupXid
+      in: query
+      description:  External Group Id (Client External)
+      schema:
+        type: string
+
+    batchXid:
+      name: batchXid
+      in: query
+      description:  External Batch Id (Client External)
+      schema:
+        type: string
+
+    dataRecordFilter:
+      name: dataRecordId
+      in: query
+      description:  Internal Data Record Id Filter
+      schema:
+        type: string
+
+    telephoneSearch:
+      name: telephone
+      in: query
+      description:  telephone number (7815551212)
+      schema:
+        type: string
+
+    emailSearch:
+      name: email
+      in: query
+      description:  email address (xxx@yyy.com)
+      schema:
+        type: string
+
+    nameSearch:
+      name: name
+      in: query
+      description:  name search
+      schema:
+        type: string
+
+    programFilter:
+      name: programId
+      in: query
+      description:  program filter
+      schema:
+        type: string
+
+    batchFilter:
+      name: batchId
+      in: query
+      description:  batch filter
+      schema:
+        type: string
+
+    outreachFilter:
+      name: outreachId
+      in: query
+      description:  outreach filter
+      schema:
+        type: string
+
+    startDateFilter:
+      name: startDate
+      in: query
+      description:  start date
+      schema:
+        type: string
+        format: date
+
+    endDateFilter:
+      name: endDate
+      in: query
+      description:  end date
+      schema:
+        type: string
+        format: date
+
+  securitySchemes:
+    name:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  ##############################################################
+  # Static Resources
+  ##############################################################
+
+  /clients:
+    get:
+      summary: Full Client List
+      description: List all Clients
+      tags:
+        - Navigation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      clients:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+  /clients/{clientId}:
+    get:
+      summary: Client Detail
+      description: Client Detail
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDef'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/programs:
+    get:
+      summary: Client Program List
+      description: List all Clients
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      programs:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+  /clients/{clientId}/programs/{programId}:
+    get:
+      summary: Program Detail
+      description: Program Detail
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/programId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramDef'
+
+    post:
+      summary: Member Submission
+      description:  |
+        # DataRecord/Entity Submission
+
+        **Proposal**
+
+        Support the submission of 1 or more 'Data Records' to the system.
+
+        Data Records submitted as a collection/array of JSON strucures that capture all of the
+        required and optional elements needed to enroll a member into a program
+
+        The API implementation would "pass through" the request to an internal "micro-service"
+        that would receive the records, assign internal Ids, and return those Ids to the caller. All that
+        is strictly required is that an ID is assigned, the request is queued, and there is a reasonable (high)
+        assurance that once queued, a data record with that Id will be available to query in the future.
+
+        NOTE: that the structure is "open ended" in that it can support any number
+        additional named fields ('F' fields).
+
+        NOTE: This specific API method replaces part of (but not all of) the Web Services API - the part that
+        ingests member records/entities.
+
+        NOTE:  The batchId supplied by the client is renamed to batchXid to clearly distinguish as eXternal and
+        distinct from the internal batchId
+
+        NOTE: The member number supplied by the client is renamed memberXid to clearly distinguish it as eXternal
+        and distinct from any internal/generic memberId
+
+        NOTE: The response code is 202-Accepted - meaning that unless there's an error on receipt, the
+        record is accepted and returns a dataRecordId. That does not mean the record will be processed. It may
+        fail and subsequent status queries against that dataRecordId should describe the failure.
+
+        # Open Questions/Issues:
+
+        1) Does the implemmentation capture all of the Web Services ingestion use cases?
+        2) Assumes the entity will either trigger creation of a new batch (if first record) or be added to programs
+        batch as appropriate - same as current web service. Correct?
+        3) Added secondary phone. Not sure it that's useful/desirable/required, or otherwise adventageous
+
+
+      tags:
+        - PHMi MVP Ingestion
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+      requestBody:
+        description: Member Data Records (Collection)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberInfoSubmission'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberInfoSubmissionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/members:
+    get:
+      summary: Member List / Member Search
+      description: |
+        Member Search
+
+        NOTE: It is not entirely clear whether a 'member' represents a single data sourcs such
+        that one might search for the member and get back one matching record.  It may be that the
+        member search returns multiple records for the same 'human' at which point it may be
+        difficult to know which is the one being sought
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/memberXid'
+        - $ref: '#/components/parameters/telephoneSearch'
+        - $ref: '#/components/parameters/emailSearch'
+        - $ref: '#/components/parameters/nameSearch'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      members:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+  /clients/{clientId}/members/{memberId}:
+    get:
+      description: |
+        Member Detail
+
+        NOTE: It is not entirely clear whether or not there is a common member record with an internal
+        Id such that the record can be used to aggregate all outreach engagements. The member info
+        may be stored in the context of each 'batch' and duplicated for common members running different
+        programs or the same program spaced in time.
+      tags:
+        - Future
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - name: memberId
+          in: path
+          required: true
+          description: Member Id (Eliza Internal)
+
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberInfo'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/members/{memberId}/outreaches:
+    get:
+      description: |
+        Member Outreach History
+      tags:
+        - Future
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - name: memberId
+          in: path
+          required: true
+          description: Member Id (Eliza Internal)
+
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberInfo'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/programs/{programId}/import:
+    post:
+      summary: Bulk Import Member Batch with CSV
+      description: |
+        # DataRecord/Entity Bulk Submission
+
+        Bulk Import Data Records Batch with CSV file.
+
+        Assume names match the fields described in the Member Submission API Call
+
+        # Open Questions/Issues:
+        1) CSV files can be unweildy. Would it be valuable to support compressed/zipped files?
+        2) CSV files are not necessarily secure at rest. Would it be valuable to "encrypt" the files?
+        3) Receiving Batch Data in a file such as this can make "exception handling" tricky.
+        Would it be worth returning some sort of "submission Id" to the submitter to indicate that
+        the file was receive and offer a "hook" to viewing the status of the file records? ( to that
+        it's not "fire and forget or wonder")
+
+      tags:
+        - PHMi MVP Ingestion
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/programId'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberInfoSubmissionImportResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+      requestBody:
+        description: Member Data Records (Collection)
+        required: true
+        content:
+          application/zip:
+            schema:
+              type: string
+              format: binary
+
+  /clients/{clientId}/programs/{programId}/batches:
+    get:
+      summary: Program Execution Batches
+      description: List all Program Execution Batches
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/programId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      batches:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+  /clients/{clientId}/programs/{programId}/batches/{batchId}:
+
+    get:
+      summary: Program Batch Detail
+      description: Program Batch Detail
+      tags:
+        - Navigation
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/programId'
+        - name: batchId
+          in: path
+          required: true
+          description:  Batch Id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramEnrollment'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/enrollments:
+    get:
+      summary: Program Enrollments (Collection)
+      description: |
+        # Program Enrollments
+        **DEFINE** A Program Enrollment is a "DataRecord"?? or "Entity"
+        Present *ALL* program enrollments for client.
+
+        # Open Questions/Issues:
+        1) In Eliza-speak, is an enrollment an "entity" or a "dataRecords"
+        2) What is the Id for an enrollment
+      tags:
+        - CRITICAL PHMi MVP Reporting
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/memberXid'
+        - $ref: '#/components/parameters/transactionXid'
+        - $ref: '#/components/parameters/groupXid'
+        - $ref: '#/components/parameters/batchXid'
+        - $ref: '#/components/parameters/programFilter'
+        - $ref: '#/components/parameters/outreachFilter'
+        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/dataRecordFilter'
+        - $ref: '#/components/parameters/startDateFilter'
+        - $ref: '#/components/parameters/endDateFilter'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      enrollments:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ProgramEnrollment'
+
+  /clients/{clientId}/enrollments/{dataRecordId}:
+    get:
+      summary: Program Enrollment (Detail)
+      description:  |
+        # Program Enrollment Detail
+
+        # Open Questions/Issues:
+        1) is the "dataRecordId" the correct Key to retrieve enrollment info
+        2) the results are similar to results returned from searching enrollments filtered by batchId.
+        Is it ok to present data in two places for same data set?
+      tags:
+        - PHMi MVP Reporting
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/dataRecordId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramEnrollment'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/enrollments/{dataRecordId}/exclude:
+    post:
+      summary: Exclude Data Record
+      description:  |
+        # Exclude Data Record
+        Support capability from WebService API to exclude a specific data record from further outreach
+
+        # Open Questions/Issues:
+      tags:
+        - PHMi MVP Ingestion
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/dataRecordId'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/outreaches:
+    get:
+      summary: Member Outreaches (Collection)
+      description:   |
+        # Member Outreaches
+
+        # Open Questions/Issues:
+        1) Review search options
+      tags:
+        - CRITICAL PHMi MVP Reporting
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/memberXid'
+        - $ref: '#/components/parameters/transactionXid'
+        - $ref: '#/components/parameters/groupXid'
+        - $ref: '#/components/parameters/batchXid'
+        - $ref: '#/components/parameters/programFilter'
+        - $ref: '#/components/parameters/outreachFilter'
+        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/dataRecordFilter'
+        - $ref: '#/components/parameters/startDateFilter'
+        - $ref: '#/components/parameters/endDateFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      outreaches:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/OutreachSummary'
+
+  /clients/{clientId}/outreaches/{outreachId}:
+    get:
+      summary: Member Outreach (Detail)
+      description:    |
+        # Member Outreach Detail
+
+        # Open Questions/Issues:
+      tags:
+        - PHMi MVP Reporting
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/outreachId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutreachDetail'
+        '404':
+          description: Not Found
+
+  /clients/{clientId}/outreachResults:
+    get:
+      summary: Member Outreach Results (Collection)
+      description: |
+        # Outreach Results
+
+        # Open Questions/Issues:
+        1) Is there any need for a method for Outreach Results Detial - a full representation of a single result?
+        2) Is there even a need for a collection of Outreach Resutls (outside of the context of the Outreach itself).
+        Meaning - would the Outreaches collection satisfy the need if it always returned all of the results.
+        3) Review search options
+      tags:
+        - PHMi MVP Reporting
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/memberXid'
+        - $ref: '#/components/parameters/transactionXid'
+        - $ref: '#/components/parameters/groupXid'
+        - $ref: '#/components/parameters/batchXid'
+        - $ref: '#/components/parameters/programFilter'
+        - $ref: '#/components/parameters/outreachFilter'
+        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/dataRecordFilter'
+        - $ref: '#/components/parameters/startDateFilter'
+        - $ref: '#/components/parameters/endDateFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      first:
+                        type: string
+                      prev:
+                        type: string
+                      next:
+                        type: string
+                      last:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      outreachResults:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/OutreachResultDetail'
+
+  ##############################################################
+  # Batch Export
+  ##############################################################
+
+  /clients/{clientId}/program/{programId}/exports:
+    get:
+      summary: Program Exports
+      description: |
+        # Program Export file
+
+        **Proposal**
+
+        The program export will be represented as (DECISION POINT)
+        - a CSV file with a single row for each member outreach/outreach result/outreach result response OR
+        - a JSON File representing the collection of stuctured outreaches.
+
+        Each month (first of month), a new export will be composed and dropped
+        into location for retrieval. The file name/Id will carry the timestamp for the new file.
+        The previous export file will be deleted.
+
+        The program-level export will be shaped as a compressed/zip file that wraps the raw data file.
+
+        The program-level export should reflect a name that identifies the client and the program.
+
+        IF a program is complete/closed, then the file Id/date/name should reflect the last activity date
+        and the file does not need to be refreshed.
+
+        (DECISION POINT)
+        - Should the raw data file include "responses" as well as "outreaches" in one file,
+        - OR should there be be multipe files with differing levels of granulatity, one for outreaches
+        and a different file for responses (keyed to outreach)
+
+
+      tags:
+        - Future
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/programId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      exports:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+              example:
+                _links:
+                  self: 'https://apiserver.com/api/clients/xxx/programs/ppp/exports'
+                count: 2
+                total: 2
+                _embedded:
+                  exports:
+                  - _links:
+                      self:
+                        href: 'https://apiserver.com/api/clients/xxx/exports/xxx-ppp-export-full-20201201.zip'
+                        rel: client-export
+                    id: xxx-ppp-export-full-20201201
+                    displayName: xxx-export-full-20201201.zip
+                  - _links:
+                      self:
+                        href: 'https://apiserver.com/api/clients/xxx/exports/xxx-ppp-export-full-20210101.zip'
+                        rel: client-export
+                    id: xxx-ppp-export-full-20210101
+                    displayName: xxx-export-full-20210101.zip
+
+  /clients/{clientId}/exports:
+    get:
+      summary: Client Exports
+      description: |
+        # Set of Recent Export Files for Client
+
+        **Proposal**
+
+        The client export will be represented as
+        - a zip file that wraps each of the program level export files (described in the program level export)
+
+        Each month (first of month), a new export will be composed and dropped
+        into location for retrieval. The file name/Id will carry the timestamp for the new file.
+        The previous export file will be deleted.
+
+        The client-level export should reflect a name that identifies the client
+
+        The client-level export should carry any updatede program level export files. However, the
+        files for completed programs should not have changed.
+
+      tags:
+        - Future
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                  count:
+                    type: number
+                  total:
+                    type: number
+                  _embedded:
+                    type: object
+                    properties:
+                      exports:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ResourceRef'
+
+              example:
+                _links:
+                  self: 'https://apiserver.com/api/clients/xxx/exports'
+                count: 3
+                total: 3
+                _embedded:
+                  exports:
+                  - _links:
+                      self:
+                        href: 'https://apiserver.com/api/clients/xxx/exports/xxx-export-full-20201101.zip'
+                        rel: client-export
+                    id: xxx-export-full-20201101
+                    displayName: xxx-export-full-20201101.zip
+                  - _links:
+                      self:
+                        href: 'https://apiserver.com/api/clients/xxx/exports/xxx-export-full-20201201.zip'
+                        rel: client-export
+                    id: xxx-export-full-20201201
+                    displayName: xxx-export-full-20201201.zip
+                  - _links:
+                      self:
+                        href: 'https://apiserver.com/api/clients/xxx/exports/xxx-export-full-20210101.zip'
+                        rel: client-export
+                    id: xxx-export-full-20210101
+                    displayName: xxx-export-full-20210101.zip
+
+  /clients/{clientId}/exports/{exportId}:
+    get:
+      summary: Download Export File
+      description: |
+        # Download Export File #
+
+        NOTE: The export is delivered as a compressed zip file containing one or more program level
+        files (as described in the client/program export API Calls)
+      tags:
+        - Future
+      parameters:
+        - $ref: '#/components/parameters/clientId'
+        - $ref: '#/components/parameters/exportId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+              example:
+                --> binary zip file <--

@@ -1,0 +1,2 @@
+clientId,memberXid,outreachId,status,result,resultDate,jobId,batchId,responses
+eric,EJH1010,eric_sol1_prog1_out1,COMPLETED,APP_COMPLETED,2020-11-11:11:11:11.111Z,111,222,"[{ ""questionCode"": ""q1"",""answer"": ""no"",""description"": ""Does anyone ever really know what time it is?"" },{""questionCode"": ""q2"",""answer"": ""yes"",""description"": ""Does anyone really care?""},{""questionCode"": ""q3"",""answer"": ""yes"",""description"": ""Do you know what time it is?""}]"
