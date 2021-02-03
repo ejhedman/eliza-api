@@ -23,20 +23,23 @@ info:
 
 tags:
 
-- name: CRITICAL PHMi MVP Reporting
+- name: PRIORITY PHMi MVP Reporting
   description:
     Resources that are strictly REQUIRED for the Eliza/Elli MVP Integration
 
-- name: PHMi MVP Reporting
+- name: PRIORITY PHMi MVP Ingestion
   description:
-    Resources that are secondary for the Eliza/Elli MVP Integration
+    Resources that are strictly REQUIRED for the Eliza/Elli MVP Integration
 
 - name: Navigation
   description:
     (OPTIONAL for MVP) Resources that are available to list, browse, search, navigate data
 
+- name: Reporting
+  description:
+    Resources that are secondary for the Eliza/Elli MVP Integration
 
-- name: PHMi MVP Ingestion
+- name: Ingestion
   description:
     Resources that are strictly REQUIRED for the Eliza/Elli MVP Integration
 
@@ -99,7 +102,7 @@ components:
         _embedded:
           type: object
           properties:
-            programOutreaches:
+            programOutreachDefs:
               type: array
               items:
                 $ref: '#/components/schemas/ResourceRef'
@@ -148,7 +151,7 @@ components:
               $ref: '#/components/schemas/Link'
             members:
               $ref: '#/components/schemas/Link'
-            programOutreaches:
+            programOutreachDefs:
               $ref: '#/components/schemas/Link'
         _associations:
           type: object
@@ -164,7 +167,7 @@ components:
         batchXid:
           type: string
 
-    ProgramEnrollmentSummary:
+    EnrollmentSummary:
       type: object
       properties:
         _links:
@@ -185,8 +188,6 @@ components:
         receivedAt:
           type: string
         startedAt:
-          type: string
-        lastContactAt:
           type: string
         completedAt:
           type: string
@@ -286,7 +287,7 @@ components:
         test:
           type: boolean
 
-    ProgramEnrollment:
+    Enrollment:
       type: object
       properties:
         _links:
@@ -310,8 +311,6 @@ components:
           type: string
         startedAt:
           type: string
-        lastContactAt:
-          type: string
         completedAt:
           type: string
         scubStatus:
@@ -323,7 +322,6 @@ components:
         excludedAt:
           type: string
 
-
         lastOutreachChannel:
           type: string
         lastOutreachAt:
@@ -332,7 +330,6 @@ components:
           type: string
         lastOutreachResultCategory:
           type: string
-
 
         transactionXid:
           type: string
@@ -355,65 +352,72 @@ components:
         gender:
           type: string
           x-pii: true
-        preferredLanguage:
-          type: string
-          x-pii: true
-        email:
-          type: string
-          x-pii: true
-        primaryPhone:
-          type: string
-          x-pii: true
-        secondaryPhone:
-          type: string
-          x-pii: true
-        address1:
-          type: string
-          x-pii: true
-        address2:
-          type: string
-          x-pii: true
-        city:
-          type: string
-          x-pii: true
-        state:
-          type: string
-          x-pii: true
-        postalCode:
-          type: string
-          x-pii: true
-        lineOfBusiness:
-          type: string
-        allowedChannels:
+        # preferredLanguage:
+        #   type: string
+        #   x-pii: true
+        # email:
+        #   type: string
+        #   x-pii: true
+        # primaryPhone:
+        #   type: string
+        #   x-pii: true
+        # secondaryPhone:
+        #   type: string
+        #   x-pii: true
+        # address1:
+        #   type: string
+        #   x-pii: true
+        # address2:
+        #   type: string
+        #   x-pii: true
+        # city:
+        #   type: string
+        #   x-pii: true
+        # state:
+        #   type: string
+        #   x-pii: true
+        # postalCode:
+        #   type: string
+        #   x-pii: true
+        # lineOfBusiness:
+        #   type: string
+        # allowedChannels:
+        #   type: object
+        #   properties:
+        #     telephone:
+        #       type: boolean
+        #     messaging:
+        #       type: boolean
+        #     email:
+        #       type: string
+        # allowedContactDays:
+        #   type: object
+        #   properties:
+        #     monday:
+        #       type: boolean
+        #     tuesday:
+        #       type: boolean
+        #     wednesday:
+        #       type: boolean
+        #     thursday:
+        #       type: boolean
+        #     friday:
+        #       type: boolean
+        #     saturday:
+        #       type: boolean
+        #     sunday:
+        #       type: boolean
+        # test:
+        #   type: boolean
+        _embedded:
           type: object
           properties:
-            telephone:
-              type: boolean
-            messaging:
-              type: boolean
-            email:
-              type: string
-        allowedContactDays:
-          type: object
-          properties:
-            monday:
-              type: boolean
-            tuesday:
-              type: boolean
-            wednesday:
-              type: boolean
-            thursday:
-              type: boolean
-            friday:
-              type: boolean
-            saturday:
-              type: boolean
-            sunday:
-              type: boolean
-        test:
-          type: boolean
+            outreachResults:
+              type: array
+              items:
+                $ref: '#/components/schemas/OutreachResultSummary'
 
-    OutreachSummary:
+    OutreachAttemptSummary:
       type: object
       properties:
         _links:
@@ -468,7 +472,7 @@ components:
         #       items:
         #         $ref: '#/components/schemas/OutreachResultSummary'
 
-    OutreachDetail:
+    OutreachAttemptDetail:
       type: object
       properties:
         _links:
@@ -700,7 +704,7 @@ components:
         isLastBest:
           type: string
 
-    MemberInfo:
+    EnrollmentInfo:
       type: object
       properties:
         _links:
@@ -711,7 +715,7 @@ components:
             enrollments:
               $ref: '#/components/schemas/Link'
               description: Search for member engagements by member
-            outreaches:
+            outreachAttempts:
               $ref: '#/components/schemas/Link'
             outreachResults:
               $ref: '#/components/schemas/Link'
@@ -765,7 +769,7 @@ components:
       additionalProperties:
         type: string
 
-    MemberInfoSubmission:
+    EnrollmentInfoSubmission:
       type: array
       items:
         type: object
@@ -850,7 +854,7 @@ components:
         additionalProperties:
           type: string
 
-    MemberInfoSubmissionResponse:
+    EnrollmentInfoSubmissionResponse:
       type: array
       items:
         type: object
@@ -859,10 +863,10 @@ components:
             type: string
           memberXid:
             type: string
-          dataRecordId:
+          enrollmentId:
             type: string
 
-    MemberInfoSubmissionImportResponse:
+    EnrollmentInfoSubmissionImportResponse:
       type: object
       properties:
         submissionId:
@@ -958,6 +962,14 @@ components:
       schema:
         type: string
 
+    outreachAttemptId:
+      name: outreachAttemptId
+      in: path
+      required: true
+      description:  Outreach Attempt Id
+      schema:
+        type: string
+
     exportId:
       name: exportId
       in: path
@@ -966,8 +978,8 @@ components:
       schema:
         type: string
 
-    dataRecordId:
-      name: dataRecordId
+    enrollmentId:
+      name: enrollmentId
       in: path
       required: true
       description:  Internal Data Record Id (Eliza Internal)
@@ -1006,7 +1018,7 @@ components:
         type: string
 
     dataRecordFilter:
-      name: dataRecordId
+      name: enrollmentId
       in: query
       description:  Internal Data Record Id Filter
       schema:
@@ -1040,17 +1052,24 @@ components:
       schema:
         type: string
 
-    batchFilter:
-      name: batchId
-      in: query
-      description:  batch filter
-      schema:
-        type: string
+    # batchFilter:
+    #   name: batchId
+    #   in: query
+    #   description:  batch filter
+    #   schema:
+    #     type: string
 
     outreachFilter:
       name: outreachId
       in: query
       description:  outreach filter
+      schema:
+        type: string
+
+    outreachAttemptFilter:
+      name: outreachAttemptId
+      in: query
+      description:  outreach attempt filter
       schema:
         type: string
 
@@ -1227,8 +1246,8 @@ paths:
         and distinct from any internal/generic memberId
 
         NOTE: The response code is 202-Accepted - meaning that unless there's an error on receipt, the
-        record is accepted and returns a dataRecordId. That does not mean the record will be processed. It may
-        fail and subsequent status queries against that dataRecordId should describe the failure.
+        record is accepted and returns a enrollmentId. That does not mean the record will be processed. It may
+        fail and subsequent status queries against that enrollmentId should describe the failure.
 
         # Open Questions/Issues:
 
@@ -1239,7 +1258,8 @@ paths:
 
 
       tags:
-        - PHMi MVP Ingestion
+        - PRIORITY PHMi MVP Ingestion
+        - Ingestion
       parameters:
         - $ref: '#/components/parameters/clientId'
       requestBody:
@@ -1248,7 +1268,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberInfoSubmission'
+              $ref: '#/components/schemas/EnrollmentInfoSubmission'
       responses:
         '202':
           description: Accepted
@@ -1257,7 +1277,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MemberInfoSubmissionResponse'
+                  $ref: '#/components/schemas/EnrollmentInfoSubmissionResponse'
         '400':
           description: Bad Request
           content:
@@ -1267,115 +1287,115 @@ paths:
         '404':
           description: Not Found
 
-  /clients/{clientId}/members:
-    get:
-      summary: Member List / Member Search
-      description: |
-        Member Search
+  # /clients/{clientId}/members:
+  #   get:
+  #     summary: Member List / Member Search
+  #     description: |
+  #       Member Search
 
-        NOTE: It is not entirely clear whether a 'member' represents a single data sourcs such
-        that one might search for the member and get back one matching record.  It may be that the
-        member search returns multiple records for the same 'human' at which point it may be
-        difficult to know which is the one being sought
-      tags:
-        - Navigation
-      parameters:
-        - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/memberXid'
-        - $ref: '#/components/parameters/telephoneSearch'
-        - $ref: '#/components/parameters/emailSearch'
-        - $ref: '#/components/parameters/nameSearch'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                      first:
-                        type: string
-                      prev:
-                        type: string
-                      next:
-                        type: string
-                      last:
-                        type: string
-                  count:
-                    type: number
-                  total:
-                    type: number
-                  _embedded:
-                    type: object
-                    properties:
-                      members:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/ResourceRef'
+  #       NOTE: It is not entirely clear whether a 'member' represents a single data sourcs such
+  #       that one might search for the member and get back one matching record.  It may be that the
+  #       member search returns multiple records for the same 'human' at which point it may be
+  #       difficult to know which is the one being sought
+  #     tags:
+  #       - Navigation
+  #     parameters:
+  #       - $ref: '#/components/parameters/clientId'
+  #       - $ref: '#/components/parameters/memberXid'
+  #       - $ref: '#/components/parameters/telephoneSearch'
+  #       - $ref: '#/components/parameters/emailSearch'
+  #       - $ref: '#/components/parameters/nameSearch'
+  #     responses:
+  #       '200':
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 _links:
+  #                   type: object
+  #                   properties:
+  #                     self:
+  #                       type: string
+  #                     first:
+  #                       type: string
+  #                     prev:
+  #                       type: string
+  #                     next:
+  #                       type: string
+  #                     last:
+  #                       type: string
+  #                 count:
+  #                   type: number
+  #                 total:
+  #                   type: number
+  #                 _embedded:
+  #                   type: object
+  #                   properties:
+  #                     members:
+  #                       type: array
+  #                       items:
+  #                         $ref: '#/components/schemas/ResourceRef'
 
-  /clients/{clientId}/members/{memberId}:
-    get:
-      description: |
-        Member Detail
+  # /clients/{clientId}/members/{memberId}:
+  #   get:
+  #     description: |
+  #       Member Detail
 
-        NOTE: It is not entirely clear whether or not there is a common member record with an internal
-        Id such that the record can be used to aggregate all outreach engagements. The member info
-        may be stored in the context of each 'batch' and duplicated for common members running different
-        programs or the same program spaced in time.
-      tags:
-        - Future
-      parameters:
-        - $ref: '#/components/parameters/clientId'
-        - name: memberId
-          in: path
-          required: true
-          description: Member Id (Eliza Internal)
+  #       NOTE: It is not entirely clear whether or not there is a common member record with an internal
+  #       Id such that the record can be used to aggregate all outreach engagements. The member info
+  #       may be stored in the context of each 'batch' and duplicated for common members running different
+  #       programs or the same program spaced in time.
+  #     tags:
+  #       - Future
+  #     parameters:
+  #       - $ref: '#/components/parameters/clientId'
+  #       - name: memberId
+  #         in: path
+  #         required: true
+  #         description: Member Id (Eliza Internal)
 
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MemberInfo'
-        '404':
-          description: Not Found
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/EnrollmentInfo'
+  #       '404':
+  #         description: Not Found
 
-  /clients/{clientId}/members/{memberId}/outreaches:
-    get:
-      description: |
-        Member Outreach History
-      tags:
-        - Future
-      parameters:
-        - $ref: '#/components/parameters/clientId'
-        - name: memberId
-          in: path
-          required: true
-          description: Member Id (Eliza Internal)
+  # /clients/{clientId}/members/{memberId}/outreachAttempts:
+  #   get:
+  #     description: |
+  #       Member Outreach History
+  #     tags:
+  #       - Future
+  #     parameters:
+  #       - $ref: '#/components/parameters/clientId'
+  #       - name: memberId
+  #         in: path
+  #         required: true
+  #         description: Member Id (Eliza Internal)
 
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MemberInfo'
-        '404':
-          description: Not Found
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/EnrollmentInfo'
+  #       '404':
+  #         description: Not Found
 
   /clients/{clientId}/programs/{programId}/import:
     post:
@@ -1396,7 +1416,7 @@ paths:
         it's not "fire and forget or wonder")
 
       tags:
-        - PHMi MVP Ingestion
+        - Ingestion
       parameters:
         - $ref: '#/components/parameters/clientId'
         - $ref: '#/components/parameters/programId'
@@ -1406,7 +1426,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MemberInfoSubmissionImportResponse'
+                $ref: '#/components/schemas/EnrollmentInfoSubmissionImportResponse'
         '400':
           description: Bad Request
           content:
@@ -1423,73 +1443,73 @@ paths:
               type: string
               format: binary
 
-  /clients/{clientId}/programs/{programId}/batches:
-    get:
-      summary: Program Execution Batches
-      description: List all Program Execution Batches
-      tags:
-        - Navigation
-      parameters:
-        - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/programId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                      first:
-                        type: string
-                      prev:
-                        type: string
-                      next:
-                        type: string
-                      last:
-                        type: string
-                  count:
-                    type: number
-                  total:
-                    type: number
-                  _embedded:
-                    type: object
-                    properties:
-                      batches:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/ResourceRef'
+  # /clients/{clientId}/programs/{programId}/batches:
+  #   get:
+  #     summary: Program Execution Batches
+  #     description: List all Program Execution Batches
+  #     tags:
+  #       - Navigation
+  #     parameters:
+  #       - $ref: '#/components/parameters/clientId'
+  #       - $ref: '#/components/parameters/programId'
+  #     responses:
+  #       '200':
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 _links:
+  #                   type: object
+  #                   properties:
+  #                     self:
+  #                       type: string
+  #                     first:
+  #                       type: string
+  #                     prev:
+  #                       type: string
+  #                     next:
+  #                       type: string
+  #                     last:
+  #                       type: string
+  #                 count:
+  #                   type: number
+  #                 total:
+  #                   type: number
+  #                 _embedded:
+  #                   type: object
+  #                   properties:
+  #                     batches:
+  #                       type: array
+  #                       items:
+  #                         $ref: '#/components/schemas/ResourceRef'
 
-  /clients/{clientId}/programs/{programId}/batches/{batchId}:
+  # /clients/{clientId}/programs/{programId}/batches/{batchId}:
 
-    get:
-      summary: Program Batch Detail
-      description: Program Batch Detail
-      tags:
-        - Navigation
-      parameters:
-        - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/programId'
-        - name: batchId
-          in: path
-          required: true
-          description:  Batch Id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProgramEnrollment'
-        '404':
-          description: Not Found
+  #   get:
+  #     summary: Program Batch Detail
+  #     description: Program Batch Detail
+  #     tags:
+  #       - Navigation
+  #     parameters:
+  #       - $ref: '#/components/parameters/clientId'
+  #       - $ref: '#/components/parameters/programId'
+  #       - name: batchId
+  #         in: path
+  #         required: true
+  #         description:  Batch Id
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Enrollment'
+  #       '404':
+  #         description: Not Found
 
   /clients/{clientId}/enrollments:
     get:
@@ -1503,7 +1523,8 @@ paths:
         1) In Eliza-speak, is an enrollment an "entity" or a "dataRecords"
         2) What is the Id for an enrollment
       tags:
-        - CRITICAL PHMi MVP Reporting
+        - PRIORITY PHMi MVP Reporting
+        - Reporting
       parameters:
         - $ref: '#/components/parameters/clientId'
         - $ref: '#/components/parameters/memberXid'
@@ -1511,8 +1532,8 @@ paths:
         - $ref: '#/components/parameters/groupXid'
         - $ref: '#/components/parameters/batchXid'
         - $ref: '#/components/parameters/programFilter'
-        - $ref: '#/components/parameters/outreachFilter'
-        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/outreachAttemptFilter'
+        # - $ref: '#/components/parameters/batchFilter'
         - $ref: '#/components/parameters/dataRecordFilter'
         - $ref: '#/components/parameters/startDateFilter'
         - $ref: '#/components/parameters/endDateFilter'
@@ -1548,34 +1569,34 @@ paths:
                       enrollments:
                         type: array
                         items:
-                          $ref: '#/components/schemas/ProgramEnrollment'
+                          $ref: '#/components/schemas/Enrollment'
 
-  /clients/{clientId}/enrollments/{dataRecordId}:
+  /clients/{clientId}/enrollments/{enrollmentId}:
     get:
       summary: Program Enrollment (Detail)
       description:  |
         # Program Enrollment Detail
 
         # Open Questions/Issues:
-        1) is the "dataRecordId" the correct Key to retrieve enrollment info
+        1) is the "enrollmentId" the correct Key to retrieve enrollment info
         2) the results are similar to results returned from searching enrollments filtered by batchId.
         Is it ok to present data in two places for same data set?
       tags:
-        - PHMi MVP Reporting
+        - PRIORITY PHMi MVP Reporting
       parameters:
         - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/dataRecordId'
+        - $ref: '#/components/parameters/enrollmentId'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProgramEnrollment'
+                $ref: '#/components/schemas/Enrollment'
         '404':
           description: Not Found
 
-  /clients/{clientId}/enrollments/{dataRecordId}/exclude:
+  /clients/{clientId}/enrollments/{enrollmentId}/exclude:
     post:
       summary: Exclude Data Record
       description:  |
@@ -1584,26 +1605,26 @@ paths:
 
         # Open Questions/Issues:
       tags:
-        - PHMi MVP Ingestion
+        - Ingestion
       parameters:
         - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/dataRecordId'
+        - $ref: '#/components/parameters/enrollmentId'
       responses:
         '204':
           description: No Content
         '404':
           description: Not Found
 
-  /clients/{clientId}/outreaches:
+  /clients/{clientId}/outreachAttempts:
     get:
-      summary: Member Outreaches (Collection)
+      summary: Outreach Attempts (Collection)
       description:   |
-        # Member Outreaches
+        # Outreach Attempts
 
         # Open Questions/Issues:
         1) Review search options
       tags:
-        - CRITICAL PHMi MVP Reporting
+        - Reporting
       parameters:
         - $ref: '#/components/parameters/clientId'
         - $ref: '#/components/parameters/memberXid'
@@ -1611,8 +1632,8 @@ paths:
         - $ref: '#/components/parameters/groupXid'
         - $ref: '#/components/parameters/batchXid'
         - $ref: '#/components/parameters/programFilter'
-        - $ref: '#/components/parameters/outreachFilter'
-        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/outreachAttemptFilter'
+        # - $ref: '#/components/parameters/batchFilter'
         - $ref: '#/components/parameters/dataRecordFilter'
         - $ref: '#/components/parameters/startDateFilter'
         - $ref: '#/components/parameters/endDateFilter'
@@ -1644,12 +1665,12 @@ paths:
                   _embedded:
                     type: object
                     properties:
-                      outreaches:
+                      outreachAttempts:
                         type: array
                         items:
-                          $ref: '#/components/schemas/OutreachSummary'
+                          $ref: '#/components/schemas/OutreachAttemptSummary'
 
-  /clients/{clientId}/outreaches/{outreachId}:
+  /clients/{clientId}/outreachAttempts/{outreachAttemptId}:
     get:
       summary: Member Outreach (Detail)
       description:    |
@@ -1657,17 +1678,18 @@ paths:
 
         # Open Questions/Issues:
       tags:
-        - PHMi MVP Reporting
+        - PRIORITY PHMi MVP Reporting
+        - Reporting
       parameters:
         - $ref: '#/components/parameters/clientId'
-        - $ref: '#/components/parameters/outreachId'
+        - $ref: '#/components/parameters/outreachAttemptId'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OutreachDetail'
+                $ref: '#/components/schemas/OutreachAttemptDetail'
         '404':
           description: Not Found
 
@@ -1680,10 +1702,10 @@ paths:
         # Open Questions/Issues:
         1) Is there any need for a method for Outreach Results Detial - a full representation of a single result?
         2) Is there even a need for a collection of Outreach Resutls (outside of the context of the Outreach itself).
-        Meaning - would the Outreaches collection satisfy the need if it always returned all of the results.
+        Meaning - would the OutreachDefs collection satisfy the need if it always returned all of the results.
         3) Review search options
       tags:
-        - PHMi MVP Reporting
+        - Reporting
       parameters:
         - $ref: '#/components/parameters/clientId'
         - $ref: '#/components/parameters/memberXid'
@@ -1691,8 +1713,8 @@ paths:
         - $ref: '#/components/parameters/groupXid'
         - $ref: '#/components/parameters/batchXid'
         - $ref: '#/components/parameters/programFilter'
-        - $ref: '#/components/parameters/outreachFilter'
-        - $ref: '#/components/parameters/batchFilter'
+        - $ref: '#/components/parameters/outreachAttemptFilter'
+        # - $ref: '#/components/parameters/batchFilter'
         - $ref: '#/components/parameters/dataRecordFilter'
         - $ref: '#/components/parameters/startDateFilter'
         - $ref: '#/components/parameters/endDateFilter'
@@ -1743,7 +1765,7 @@ paths:
 
         The program export will be represented as (DECISION POINT)
         - a CSV file with a single row for each member outreach/outreach result/outreach result response OR
-        - a JSON File representing the collection of stuctured outreaches.
+        - a JSON File representing the collection of stuctured outreahAttempts.
 
         Each month (first of month), a new export will be composed and dropped
         into location for retrieval. The file name/Id will carry the timestamp for the new file.
@@ -1757,8 +1779,8 @@ paths:
         and the file does not need to be refreshed.
 
         (DECISION POINT)
-        - Should the raw data file include "responses" as well as "outreaches" in one file,
-        - OR should there be be multipe files with differing levels of granulatity, one for outreaches
+        - Should the raw data file include "responses" as well as "outreachAttempts" in one file,
+        - OR should there be be multipe files with differing levels of granulatity, one for outreachAttempts
         and a different file for responses (keyed to outreach)
 
 
