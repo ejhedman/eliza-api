@@ -25,6 +25,7 @@ export const serialize = (req: any, data: any) => {
 
   serializer.register('enrollmentDetail', {
     whitelist: [
+        'id',
         'receivedAt',
         'startedAt',
         'completedAt',
@@ -39,25 +40,24 @@ export const serialize = (req: any, data: any) => {
 
         'memberXid',
         'transactionXid',
-        'memberXid',
         'groupXid',
         'firstName',
         'lastName',
         'dob',
         'gender',
 
-        'preferredLanguage',
-        'email',
-        'primaryPhone',
-        'secondaryPhone',
-        'address1',
-        'address2',
-        'city',
-        'state',
-        'postalCode',
-        'lineOfBusiness',
-        'allowedChannels',
-        'allowedContactDays',
+        // 'preferredLanguage',
+        // 'email',
+        // 'primaryPhone',
+        // 'secondaryPhone',
+        // 'address1',
+        // 'address2',
+        // 'city',
+        // 'state',
+        // 'postalCode',
+        // 'lineOfBusiness',
+        // 'allowedChannels',
+        // 'allowedContactDays',
 
       ],
     links: function (data: any) {
@@ -131,6 +131,7 @@ export const serializeCollection = (req: any, data: any) => {
 
   serializer.register('enrollmentCollection', {
     whitelist: [
+      'id',
       'receivedAt',
       'startedAt',
       'completedAt',

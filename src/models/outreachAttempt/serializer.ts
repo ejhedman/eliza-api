@@ -8,6 +8,7 @@ export const serialize = (req: any, data: any) => {
 
   serializer.register('outreachResultSummary', {
     whitelist: [
+      'id',
       'channel',
       'outreachAt',
       'outreachResultCategory',
