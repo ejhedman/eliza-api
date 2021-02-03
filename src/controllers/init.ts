@@ -1,14 +1,14 @@
 import * as express from 'express';
 
 import { HomeController } from './homeController';
-import { BaseController } from './baseController';
+import { ApiBaseController } from './apiBaseController';
 import { APIController } from './apiController';
 import { ClientDefController } from './clientDefController';
 import { SolutionDefController } from './solutionDefController';
 import { ProgramDefController } from './programDefController';
 import { OutreachDefController } from './outreachDefController';
 import { EnrollmentCollectionController } from './enrollmentCollectionController';
-import { OutreachCollectionController } from './outreachCollectionController';
+import { OutreachAttemptCollectionController } from './outreachAttemptCollectionController';
 import { OutreachResultCollectionController } from './outreachResultCollectionController';
 
 export const initControllers = (baseUrl: string, app: express.Application, db: FirebaseFirestore.Firestore) => {
@@ -20,13 +20,13 @@ export const initControllers = (baseUrl: string, app: express.Application, db: F
     new ProgramDefController('/clients/:clientId/programs', db),
     new OutreachDefController('/clients/:clientId/programs/:programId/outreaches', db),
 
-    new OutreachCollectionController('/clients/:clientId/outreaches', db),
+    new OutreachAttemptCollectionController('/clients/:clientId/outreachAttempts', db),
     new OutreachResultCollectionController('/clients/:clientId/outreachResults', db),
     new EnrollmentCollectionController('/clients/:clientId/enrollments', db),
   ];
 
   app.use('/', new HomeController('').router);
-  app.use('/eliza', new BaseController('').router);
+  app.use('/eliza', new ApiBaseController('').router);
   controllers.forEach((controller) => {
     app.use(baseUrl, controller.router);
   });

@@ -7,10 +7,11 @@ export class OutreachDefRepository {
     this.db = db;
   }
 
-  async getListAsync(clientId: string, filter?: any) {
+  async getListAsync(clientId: string, programId: string, filter?: any) {
     let entityCollectionRef: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = this.db.collection(
       COLLECTION_NAME,
     );
+
     if (filter) {
 
       for (const filterParm in filter) {
@@ -27,6 +28,7 @@ export class OutreachDefRepository {
 
     // always filter on client
     entityCollectionRef = entityCollectionRef.where('clientId', '==', clientId)
+    entityCollectionRef = entityCollectionRef.where('programId', '==', programId)
 
     const entityRefCollection = await entityCollectionRef.get();
     const entityList = entityRefCollection.docs.map((entityDoc) => {

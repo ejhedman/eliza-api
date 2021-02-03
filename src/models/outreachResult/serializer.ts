@@ -3,10 +3,11 @@ import { HALSerializer } from 'hal-serializer'
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('outreachResult', {
+  serializer.register('outreachResultDetail', {
     whitelist: [
+      'id',
       'channel',
       'outreachAt',
       'outreachResultCategory',
@@ -27,17 +28,16 @@ export const serialize = (req: any, data: any) => {
           id: data.programId,
           title: data.programName,
         },
-        outreach: {
-          href: `${baseUrl}/clients/${data.clientId}/outreaches/${data.outreachId}`,
-          rel: 'outreach',
-          id: data.outreachId,
-          title: data.outreachName,
+        outreachAttempt: {
+          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.outreachAttemptId}`,
+          rel: 'outreachAttempt',
+          id: data.outreachAttemptId,
         },
       };
     },
   });
 
-  const serialized = Serializer.serialize('outreachResult', data);
+  const serialized = serializer.serialize('outreachResultDetail', data);
   return serialized;
 };
 
@@ -88,9 +88,9 @@ export const serializeCollection = (req: any, data: any) => {
     }
   }
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('outreachResults', {
+  serializer.register('outreachResultColletion', {
     whitelist: [
       'channel',
       'outreachAt',
@@ -107,7 +107,7 @@ export const serializeCollection = (req: any, data: any) => {
     associations: function (data: any) {
       return {
         program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
-        outreach: { href: `${baseUrl}/clients/${data.clientId}/outreaches/${data.outreachId}`, rel: 'outreach', id: data.outreachId, title: data.outreachName },
+        outreachAttempt: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.outreachAttemptId}`, rel: 'outreachAttempt', id: data.outreachAttemptId },
       };
     },
     topLevelLinks: collectionLinks,
@@ -122,7 +122,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = Serializer.serialize('outreachResults', displayData, {
+  const serialized = serializer.serialize('outreachResultColletion', displayData, {
     page: page,
     pageSize: pageSize,
     pages: pages,

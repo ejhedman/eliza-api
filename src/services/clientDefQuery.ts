@@ -22,8 +22,8 @@ export class ClientDefQuery {
         return {
           id: program.id,
           displayName: program.displayName,
-          // _links: {
-          //   self: `${req.apiUrls.baseUrl}/programs/${program.id}` }
+          clientId: program.clientId,
+          clientName: program.clientName,
         };
       });
     }

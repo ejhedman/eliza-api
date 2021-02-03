@@ -1,6 +1,6 @@
-const COLLECTION_NAME = 'outreaches';
+const COLLECTION_NAME = 'outreachAttempts';
 
-export class OutreachRepository {
+export class OutreachAttemptRepository {
   db: FirebaseFirestore.Firestore;
 
   constructor(db: FirebaseFirestore.Firestore) {
@@ -40,6 +40,16 @@ export class OutreachRepository {
 
   async getListForProgramAsync(clientId: string, programId: string) {
     const entityCollectionRef = this.db.collection(COLLECTION_NAME).where('programId', '==', programId);
+    const entityRefCollection = await entityCollectionRef.get();
+    const entityList = entityRefCollection.docs.map((entityDoc) => {
+      const entity = entityDoc.data();
+      return entity;
+    });
+    return entityList;
+  }
+
+  async getListForEnrollmentAsync(clientId: string, enrollmentId: string) {
+    const entityCollectionRef = this.db.collection(COLLECTION_NAME).where('enrollmentId', '==', enrollmentId);
     const entityRefCollection = await entityCollectionRef.get();
     const entityList = entityRefCollection.docs.map((entityDoc) => {
       const entity = entityDoc.data();

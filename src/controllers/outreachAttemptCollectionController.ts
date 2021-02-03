@@ -1,24 +1,24 @@
 import * as express from 'express';
 // import { Request, Response } from 'express'
-import { Outreach } from '../models/outreach';
-import { OutreachRepository } from '../repositories/outreachRepository';
-import { OutreachQuery } from '../services/outreachQuery';
+import { OutreachAttempt } from '../models/outreachAttempt';
+import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
+import { OutreachAttemptQuery } from '../services/outreachAttemptQuery';
 import { ControllerBase } from './controllerBase';
 
-export class OutreachCollectionController extends ControllerBase {
+export class OutreachAttemptCollectionController extends ControllerBase {
   public path;
   public router = express.Router();
 
   db: FirebaseFirestore.Firestore;
-  outreachRepository: OutreachRepository;
-  outreachQuery: OutreachQuery;
+  outreachRepository: OutreachAttemptRepository;
+  outreachAttemptQuery: OutreachAttemptQuery;
 
   constructor(path: string, db: FirebaseFirestore.Firestore) {
     super();
     this.path = path;
     this.db = db;
-    this.outreachRepository = new OutreachRepository(db);
-    this.outreachQuery = new OutreachQuery(db);
+    this.outreachRepository = new OutreachAttemptRepository(db);
+    this.outreachAttemptQuery = new OutreachAttemptQuery(db);
     this.intializeRoutes();
   }
 
@@ -32,7 +32,7 @@ export class OutreachCollectionController extends ControllerBase {
       }
     });
 
-    // list the outreach for given symbol
+    // list the outreachAttempt for given symbol
     this.router.get(`${this.path}/:id`, async (req, res, next) => {
       try {
         await this.getDetailAsync(req, res);
@@ -46,18 +46,18 @@ export class OutreachCollectionController extends ControllerBase {
   async getListAsync(req: any, res: any) {
     const clientId = req.params.clientId;
     const filter = req.query;
-    const outreaches = await this.outreachRepository.getListAsync(clientId, filter);
-    const serialized = Outreach.serializeCollection(req, outreaches);
+    const outreachAttempts = await this.outreachRepository.getListAsync(clientId, filter);
+    const serialized = OutreachAttempt.serializeCollection(req, outreachAttempts);
     // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }
 
   async getDetailAsync(req: any, res: any) {
-    const clientId = req.params.id;
-    const outreachId = req.params.id;
-    const outreach = await this.outreachQuery.getDetailAsync(clientId, outreachId, req);
-    const serialized = Outreach.serialize(req, outreach);
+    const clientId = req.params.clientId;
+    const outreachAttemptId = req.params.id;
+    const outreachAttempt = await this.outreachAttemptQuery.getDetailAsync(clientId, outreachAttemptId, req);
+    const serialized = OutreachAttempt.serialize(req, outreachAttempt);
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

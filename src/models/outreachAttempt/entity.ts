@@ -1,6 +1,6 @@
 import { serialize, serializeCollection } from './serializer';
 
-export class Outreach {
+export class OutreachAttempt {
   static serialize(req: any, data: any) {
     return serialize(req, data);
   }

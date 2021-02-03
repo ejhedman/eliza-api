@@ -1,32 +1,35 @@
 import { ProgramDefRepository } from '../repositories/programDefRepository';
-import { OutreachRepository } from '../repositories/outreachRepository';
+import { OutreachDefRepository } from '../repositories/outreachDefRepository';
 
 export class ProgramDefQuery {
   db: FirebaseFirestore.Firestore;
   programRepository: ProgramDefRepository;
-  outreachRepository: OutreachRepository;
+  outreachDefRepository: OutreachDefRepository;
 
   constructor(db: FirebaseFirestore.Firestore) {
     this.db = db;
     this.programRepository = new ProgramDefRepository(db);
-    this.outreachRepository = new OutreachRepository(db);
+    this.outreachDefRepository = new OutreachDefRepository(db);
   }
 
   async getDetailAsync(clientId: string, programId: string, req: any) {
     const programDetail = await this.programRepository.getDetailAsync(clientId, programId);
 
     if (programDetail) {
-      const outreachList = await this.outreachRepository.getListForProgramAsync(clientId, programId);
+      const outreachList = await this.outreachDefRepository.getListForProgramAsync(clientId, programId);
 
-      programDetail.outreaches = outreachList.map((outreach) => {
+      programDetail.outreaches = outreachList.map((outreachDef) => {
         return {
-          id: outreach.id,
-          displayName: outreach.displayName,
-          // _links: {
-          //   self: `${req.apiUrls.baseUrl}/outreaches/${outreach.id}` }
+          id: outreachDef.id,
+          displayName: outreachDef.displayName,
+          programId: outreachDef.programId,
+          programName: outreachDef.programName,
+          clientId: outreachDef.clientId,
+          clientName: outreachDef.clientName
         };
       });
     }
+
     return programDetail;
   }
 }

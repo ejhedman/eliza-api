@@ -10,15 +10,15 @@ export class OutreachDefController extends ControllerBase {
   public router = express.Router();
 
   db: FirebaseFirestore.Firestore;
-  outreachRepository: OutreachDefRepository;
-  outreachQuery: OutreachDefQuery;
+  outreachDefRepository: OutreachDefRepository;
+  outreachDefQuery: OutreachDefQuery;
 
   constructor(path: string, db: FirebaseFirestore.Firestore) {
     super();
     this.path = path;
     this.db = db;
-    this.outreachRepository = new OutreachDefRepository(db);
-    this.outreachQuery = new OutreachDefQuery(db);
+    this.outreachDefRepository = new OutreachDefRepository(db);
+    this.outreachDefQuery = new OutreachDefQuery(db);
     this.intializeRoutes();
   }
 
@@ -45,18 +45,18 @@ export class OutreachDefController extends ControllerBase {
 
   async getListAsync(req: any, res: any) {
     const clientId = req.params.clientId;
+    const programId = req.params.programId;
     const filter = req.query;
-    const outreaches = await this.outreachRepository.getListAsync(clientId, filter);
-    const serialized = OutreachDef.serializeCollection(req, outreaches);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
+    const outreachAttempts = await this.outreachDefRepository.getListAsync(clientId, programId, filter);
+    const serialized = OutreachDef.serializeCollection(req, outreachAttempts);
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }
 
   async getDetailAsync(req: any, res: any) {
     const clientId = req.params.id;
-    const outreachId = req.params.id;
-    const outreach = await this.outreachQuery.getDetailAsync(clientId, outreachId, req);
+    const outreachDefId = req.params.id;
+    const outreach = await this.outreachDefQuery.getDetailAsync(clientId, outreachDefId, req);
     const serialized = OutreachDef.serialize(req, outreach);
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);

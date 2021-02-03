@@ -12,20 +12,8 @@ export class OutreachDefQuery {
     this.outreachResultRepository = new OutreachResultRepository(db);
   }
 
-  async getDetailAsync(clientId: string, outreachId: string, req: any) {
-    const outreachDetail = await this.outreachDefRepository.getDetailAsync(clientId, outreachId);
-
-    // ?? not sure if want this. list will be too big. not appropriate to embed
-    // if (outreachDetail) {
-    //   const outreachResultList = await this.outreachResultRepository.getListForOutreachAsync(outreachId)
-
-    //   outreachDetail.outreachResults = outreachResultList.map( (outreachResult) => { return {
-    //     outreachResultId: outreachResult.Id,
-    //     _links: {
-    //       self: `${req.apiUrls.baseUrl}/outreachResults/${outreachResult.id}` }
-    //     }
-    //   })
-    // }
+  async getDetailAsync(clientId: string, outreachDefId: string, req: any) {
+    const outreachDetail = await this.outreachDefRepository.getDetailAsync(clientId, outreachDefId);
 
     return outreachDetail;
   }

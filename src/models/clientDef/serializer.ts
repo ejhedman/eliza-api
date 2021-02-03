@@ -2,13 +2,10 @@ import { HALSerializer } from 'hal-serializer'
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
-  const selfUrl = req.apiUrls.selfUrl;
 
-  console.log(data)
+  const serializer = new HALSerializer();
 
-  const Serializer = new HALSerializer();
-
-  Serializer.register('programRef', {
+  serializer.register('programDef', {
     whitelist: ['id', 'displayName'],
     links: function (data: any) {
       return {
@@ -17,23 +14,23 @@ export const serialize = (req: any, data: any) => {
     },
   });
 
-  Serializer.register('client', {
+  serializer.register('clientDef', {
     whitelist: ['id', 'displayName', 'description'],
     links: function (record: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.id}`, rel: 'client' },
         enrollments: { href: `${baseUrl}/clients/${data.id}/enrollments` },
-        outreaches: { href: `${baseUrl}/clients/${data.id}/outreaches` },
+        outreachAttempts: { href: `${baseUrl}/clients/${data.id}/outreachAttempts` },
       };
     },
     embedded: {
       programs: {
-        type: 'programRef',
+        type: 'programDef',
       },
     },
   });
 
-  const serialized = Serializer.serialize('client', data);
+  const serialized = serializer.serialize('clientDef', data);
   return serialized;
 };
 
@@ -81,7 +78,7 @@ export const serializeCollection = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  serializer.register('clients', {
+  serializer.register('clientCollection', {
     whitelist: ['id', 'displayName', 'description'],
     links: (record: any) => {
       return {
@@ -100,7 +97,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('clients', displayData, {
+  const serialized = serializer.serialize('clientCollection', displayData, {
     page,
     pageSize,
     pages,

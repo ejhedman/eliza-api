@@ -8,7 +8,7 @@ const appInstance = new App('/eliza/api')   // NOTE: Set BASE URL here.
 const app = appInstance.app
 app.set('trust proxy', true);
 
-var port = normalizePort(process.env.PORT || '80');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 var server = http.createServer(app);

@@ -1,41 +1,43 @@
 import { EnrollmentRepository } from '../repositories/enrollmentRepository';
-import { OutreachResultRepository } from '../repositories/outreachResultRepository';
+import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
 
 export class EnrollmentQuery {
   db: FirebaseFirestore.Firestore;
   enrollmentRepository: EnrollmentRepository;
-  outreachResultRepository: OutreachResultRepository;
+  outreachRepository: OutreachAttemptRepository;
 
   constructor(db: FirebaseFirestore.Firestore) {
     this.db = db;
     this.enrollmentRepository = new EnrollmentRepository(db);
-    this.outreachResultRepository = new OutreachResultRepository(db);
+    this.outreachRepository = new OutreachAttemptRepository(db);
   }
 
   async getDetailAsync(clientId: string, id: string, req: any) {
     const enrollmentDetail = await this.enrollmentRepository.getDetailAsync(clientId, id);
 
     if (enrollmentDetail) {
-      // const outreachResultList = await this.outreachResultRepository.getListForEnrollmentAsync(id);
-      // enrollmentDetail.outreachResults = outreachResultList.map((outreachResult) => {
-      //   return {
-      //     id: outreachResult.id,
-      //     programId: outreachResult.programId,
-      //     programName: outreachResult.programName,
-      //     solutionId: outreachResult.solutionId,
-      //     solutionName: outreachResult.solutionName,
-      //     memberXid: outreachResult.memberXid,
-      //     batchId: outreachResult.batchId,
-      //     jobId: outreachResult.jobId,
-      //     result: outreachResult.result,
-      //     resultDate: outreachResult.resultDate,
-      //     status: outreachResult.status,
-      //     responses: outreachResult.responses,
-      //     _links: {
-      //       self: `${req.apiUrls.baseUrl}/outreachResults/${outreachResult.id}`,
-      //     },
-      //   };
-      // });
+      const outreachList = await this.outreachRepository.getListForEnrollmentAsync(clientId, id);
+      enrollmentDetail.outreachAttempts = outreachList.map((outreachAttempt) => {
+        return {
+          id: outreachAttempt.id,
+          displayName: outreachAttempt.displayName,
+          programId: outreachAttempt.programId,
+          programName: outreachAttempt.programName,
+          solutionId: outreachAttempt.solutionId,
+          solutionName: outreachAttempt.solutionName,
+          clientId: outreachAttempt.clientId,
+          clientName: outreachAttempt.clientName,
+          memberXid: outreachAttempt.memberXid,
+          // batchId: out reach.batchId,
+
+          channel: outreachAttempt.channel,
+          outreachStatus: outreachAttempt.outreachStatus,
+          firstAttemptAt: outreachAttempt.firstAttemptAt,
+          lastAttemptAt: outreachAttempt.lastAttemptAt,
+          attempts: outreachAttempt.attempts,
+          lastBestResult: outreachAttempt.lastBestResult,
+        };
+      });
     }
     return enrollmentDetail;
   }

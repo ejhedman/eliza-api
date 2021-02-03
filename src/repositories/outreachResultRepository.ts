@@ -37,8 +37,8 @@ export class OutreachResultRepository {
     return entityList;
   }
 
-  async getListForOutreachAsync(clientId: string, outreachId: string) {
-    const entityCollectionRef = this.db.collection(COLLECTION_NAME).where('outreachId', '==', outreachId);
+  async getListForOutreachAsync(clientId: string, outreachAttemptId: string) {
+    const entityCollectionRef = this.db.collection(COLLECTION_NAME).where('outreachAttemptId', '==', outreachAttemptId);
     const entityRefCollection = await entityCollectionRef.get();
     const entityList = entityRefCollection.docs.map((entityDoc) => {
       const entity = entityDoc.data();

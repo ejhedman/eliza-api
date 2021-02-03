@@ -4,15 +4,15 @@ export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
   const selfUrl = req.apiUrls.selfUrl;
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('outreach', {
+  serializer.register('outreahDef', {
     whitelist: ['id', 'displayName', 'description', 'channel'],
     links: function (record: any) {
       return {
         self: { href: `${selfUrl}`, rel: 'outreach' },
-        outreaches: {
-          href: `${baseUrl}/clients/${data.clientId}/outreaches?outreachId=${data.id}`,
+        outreachAttempts: {
+          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?outreachId=${data.id}`,
           rel: 'collection:outreachResults',
         },
       };
@@ -28,7 +28,7 @@ export const serialize = (req: any, data: any) => {
     },
   });
 
-  const serialized = Serializer.serialize('outreach', data);
+  const serialized = serializer.serialize('outreahDef', data);
   return serialized;
 };
 
@@ -76,11 +76,11 @@ export const serializeCollection = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  serializer.register('outreaches', {
+  serializer.register('outreachDefCollection', {
     whitelist: ['id', 'displayName', 'description'],
     links: (record: any) => {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/outreaches/${record.id}`, rel: 'outreach' },
+        self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.programId}/outreaches/${record.id}`, rel: 'outreach' },
       };
     },
     topLevelLinks: collectionLinks,
@@ -95,7 +95,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('outreaches', displayData, {
+  const serialized = serializer.serialize('outreachDefCollection', displayData, {
     page,
     pageSize,
     pages,

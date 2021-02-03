@@ -1,23 +1,23 @@
-import { OutreachRepository } from '../repositories/outreachRepository';
+import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
 import { OutreachResultRepository } from '../repositories/outreachResultRepository';
 
-export class OutreachQuery {
+export class OutreachAttemptQuery {
   db: FirebaseFirestore.Firestore;
-  outreachRepository: OutreachRepository;
+  outreachAttemptRepository: OutreachAttemptRepository;
   outreachResultRepository: OutreachResultRepository;
 
   constructor(db: FirebaseFirestore.Firestore) {
     this.db = db;
-    this.outreachRepository = new OutreachRepository(db);
+    this.outreachAttemptRepository = new OutreachAttemptRepository(db);
     this.outreachResultRepository = new OutreachResultRepository(db);
   }
 
-  async getDetailAsync(clientId: string, outreachId: string, req: any) {
-    const outreachDetail = await this.outreachRepository.getDetailAsync(clientId, outreachId);
+  async getDetailAsync(clientId: string, outreachAttemptId: string, req: any) {
+    const outreachDetail = await this.outreachAttemptRepository.getDetailAsync(clientId, outreachAttemptId);
 
     // ?? not sure if want this. list will be too big. not appropriate to embed
     if (outreachDetail) {
-      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, outreachId);
+      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, outreachAttemptId);
 
       outreachDetail.outreachResults = outreachResults.map((outreachResult) => {
         return {

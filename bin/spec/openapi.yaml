@@ -199,14 +199,23 @@ components:
         excludedAt:
           type: string
 
+        lastOutreachChannel:
+          type: string
+        lastOutreachAt:
+          type: string
+        lastOutreachResult:
+          type: string
+        lastOutreachResultCategory:
+          type: string
+
         transactionXid:
           type: string
         memberXid:
           type: string
-        groupXid:
-          type: string
-        batchXid:
-          type: string
+        # groupXid:
+        #   type: string
+        # batchXid:
+        #   type: string
         firstName:
           type: string
           x-pii: true
@@ -219,61 +228,61 @@ components:
         gender:
           type: string
           x-pii: true
-        preferredLanguage:
-          type: string
-          x-pii: true
-        email:
-          type: string
-          x-pii: true
-        primaryPhone:
-          type: string
-          x-pii: true
-        secondaryPhone:
-          type: string
-          x-pii: true
-        address1:
-          type: string
-          x-pii: true
-        address2:
-          type: string
-          x-pii: true
-        city:
-          type: string
-          x-pii: true
-        state:
-          type: string
-          x-pii: true
-        postalCode:
-          type: string
-          x-pii: true
-        lineOfBusiness:
-          type: string
-        allowedChannels:
-          type: object
-          properties:
-            telephone:
-              type: boolean
-            messaging:
-              type: boolean
-            email:
-              type: string
-        allowedContactDays:
-          type: object
-          properties:
-            monday:
-              type: boolean
-            tuesday:
-              type: boolean
-            wednesday:
-              type: boolean
-            thursday:
-              type: boolean
-            friday:
-              type: boolean
-            saturday:
-              type: boolean
-            sunday:
-              type: boolean
+        # preferredLanguage:
+        #   type: string
+        #   x-pii: true
+        # email:
+        #   type: string
+        #   x-pii: true
+        # primaryPhone:
+        #   type: string
+        #   x-pii: true
+        # secondaryPhone:
+        #   type: string
+        #   x-pii: true
+        # address1:
+        #   type: string
+        #   x-pii: true
+        # address2:
+        #   type: string
+        #   x-pii: true
+        # city:
+        #   type: string
+        #   x-pii: true
+        # state:
+        #   type: string
+        #   x-pii: true
+        # postalCode:
+        #   type: string
+        #   x-pii: true
+        # lineOfBusiness:
+        #   type: string
+        # allowedChannels:
+        #   type: object
+        #   properties:
+        #     telephone:
+        #       type: boolean
+        #     messaging:
+        #       type: boolean
+        #     email:
+        #       type: string
+        # allowedContactDays:
+        #   type: object
+        #   properties:
+        #     monday:
+        #       type: boolean
+        #     tuesday:
+        #       type: boolean
+        #     wednesday:
+        #       type: boolean
+        #     thursday:
+        #       type: boolean
+        #     friday:
+        #       type: boolean
+        #     saturday:
+        #       type: boolean
+        #     sunday:
+        #       type: boolean
         test:
           type: boolean
 
@@ -314,6 +323,17 @@ components:
         excludedAt:
           type: string
 
+
+        lastOutreachChannel:
+          type: string
+        lastOutreachAt:
+          type: string
+        lastOutreachResult:
+          type: string
+        lastOutreachResultCategory:
+          type: string
+
+
         transactionXid:
           type: string
         memberXid:
@@ -322,6 +342,7 @@ components:
           type: string
         batchXid:
           type: string
+
         firstName:
           type: string
           x-pii: true
@@ -439,13 +460,13 @@ components:
           type: number
         lastBestReault:
           type: string
-        _embedded:
-          type: object
-          properties:
-            programOutreaches:
-              type: array
-              items:
-                $ref: '#/components/schemas/OutreachResultSummary'
+        # _embedded:
+        #   type: object
+        #   properties:
+        #     outreachResults:
+        #       type: array
+        #       items:
+        #         $ref: '#/components/schemas/OutreachResultSummary'
 
     OutreachDetail:
       type: object
@@ -495,7 +516,7 @@ components:
         _embedded:
           type: object
           properties:
-            programOutreaches:
+            outreachResults:
               type: array
               items:
                 $ref: '#/components/schemas/OutreachResultDetail'

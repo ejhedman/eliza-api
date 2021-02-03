@@ -4,9 +4,9 @@ export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
   const selfUrl = req.apiUrls.selfUrl;
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('programRef', {
+  serializer.register('programDef', {
     whitelist: ['id', 'displayName'],
     links: function (data: any) {
       return {
@@ -15,7 +15,7 @@ export const serialize = (req: any, data: any) => {
     },
   });
 
-  Serializer.register('solution', {
+  serializer.register('solutionDef', {
     whitelist: ['id', 'displayName', 'description'],
     links: function (record: any) {
       return {
@@ -24,12 +24,12 @@ export const serialize = (req: any, data: any) => {
     },
     embedded: {
       programs: {
-        type: 'programRef',
+        type: 'programDef',
       },
     },
   });
 
-  const serialized = Serializer.serialize('solution', data);
+  const serialized = serializer.serialize('solutionDef', data);
   return serialized;
 };
 
@@ -77,7 +77,7 @@ export const serializeCollection = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  serializer.register('solutions', {
+  serializer.register('solutionCollection', {
     whitelist: ['id', 'displayName', 'description'],
     links: (record: any) => {
       return {
@@ -96,7 +96,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('solutions', displayData, {
+  const serialized = serializer.serialize('solutionCollection', displayData, {
     page,
     pageSize,
     pages,

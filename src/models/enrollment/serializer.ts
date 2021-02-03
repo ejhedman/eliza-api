@@ -3,26 +3,49 @@ import { HALSerializer } from 'hal-serializer'
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('enrollment', {
+  serializer.register('outreachAttemptSummary', {
+    whitelist: [
+      'id',
+      'displayName',
+      'channel',
+      'outreachStatus',
+      'firstAttemptAt',
+      'lastAttemptAt',
+      'attempts',
+      'lastBestResult'
+],
+    links: function (data: any) {
+      return {
+        self: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.id}`, rel: 'outreachAttempt' },
+      };
+    },
+  });
+
+  serializer.register('enrollmentDetail', {
     whitelist: [
         'receivedAt',
         'startedAt',
-        'lastContactAt',
         'completedAt',
         'scubStatus',
         'scrubReason',
         'excluded',
         'excludedAt',
+        'lastOutreachChannel',
+        'lastOutreachAt',
+        'lastOutreachResult',
+        'lastOutreachResultCategory',
+
+        'memberXid',
         'transactionXid',
         'memberXid',
         'groupXid',
-        'batchXid',
         'firstName',
         'lastName',
         'dob',
         'gender',
+
         'preferredLanguage',
         'email',
         'primaryPhone',
@@ -35,14 +58,14 @@ export const serialize = (req: any, data: any) => {
         'lineOfBusiness',
         'allowedChannels',
         'allowedContactDays',
-        'test',
-    ],
+
+      ],
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.id}`, rel: 'enrollment' },
-        outreaches: {
-          href: `${baseUrl}/clients/${data.clientId}/outreaches?enrollmentId=${data.id}`,
-          rel: 'collection:outreachResults',
+        outreachAttempts: {
+          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?enrollmentId=${data.id}`,
+          rel: 'collection:outreachAttempts',
         },
       };
     },
@@ -51,9 +74,14 @@ export const serialize = (req: any, data: any) => {
         program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', title: data.programName },
       };
     },
+    embedded: {
+      outreachAttempts: {
+        type: 'outreachAttemptSummary',
+      },
+    },
   });
 
-  const serialized = Serializer.serialize('enrollment', data);
+  const serialized = serializer.serialize('enrollmentDetail', data);
   return serialized;
 };
 
@@ -99,23 +127,28 @@ export const serializeCollection = (req: any, data: any) => {
     }
   }
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
-  Serializer.register('enrollments', {
+  serializer.register('enrollmentCollection', {
     whitelist: [
       'receivedAt',
       'startedAt',
-      'lastContactAt',
       'completedAt',
       'scubStatus',
       'scrubReason',
       'excluded',
       'excludedAt',
-      'transactionXid',
+      'lastOutreachChannel',
+      'lastOutreachAt',
+      'lastOutreachResult',
+      'lastOutreachResultCategory',
+
       'memberXid',
-      'email',
-      'primaryPhone',
-      'test'
+      'firstName',
+      'lastName',
+      'dob',
+      'gender',
+
     ],
     links: function (data: any) {
       return {
@@ -143,7 +176,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = Serializer.serialize('enrollments', displayData, {
+  const serialized = serializer.serialize('enrollmentCollection', displayData, {
     page: page,
     pageSize: pageSize,
     pages: pages,

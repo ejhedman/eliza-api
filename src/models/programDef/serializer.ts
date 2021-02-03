@@ -4,27 +4,30 @@ export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
   const selfUrl = req.apiUrls.selfUrl;
 
-  const Serializer = new HALSerializer();
+  const serializer = new HALSerializer();
 
   // EJH: HACK
-  data.isTransactional = false;
+  if (data) {
+    data.isTransactional = false;
 
-  Serializer.register('outreachRef', {
+  }
+
+  serializer.register('outreachDef', {
     whitelist: ['id', 'displayName'],
     links: function (data: any) {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/outreaches/${data.id}` },
+        self: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}/outreaches/${data.id}` },
       };
     },
   });
 
-  Serializer.register('program', {
+  serializer.register('programDef', {
     whitelist: ['id', 'displayName', 'description', 'isTransactional'],
     links: function (record: any) {
       return {
         self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.id}`, rel: 'program' },
         enrollments: { href: `${baseUrl}/clients/${record.clientId}/enrollments?programId=${record.id}` },
-        outreaches: { href: `${baseUrl}/clients/${record.clientId}/outreaches?programId=${record.id}` },
+        outreachAttempts: { href: `${baseUrl}/clients/${record.clientId}/outreachAttempts?programId=${record.id}` },
       };
     },
     associations: function (record: any) {
@@ -34,12 +37,12 @@ export const serialize = (req: any, data: any) => {
     },
     embedded: {
       outreaches: {
-        type: 'outreachRef',
+        type: 'outreachDef',
       },
     },
   });
 
-  const serialized = Serializer.serialize('program', data);
+  const serialized = serializer.serialize('programDef', data);
   return serialized;
 };
 
@@ -87,11 +90,11 @@ export const serializeCollection = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  serializer.register('programs', {
+  serializer.register('programCollection', {
     whitelist: ['id', 'displayName', 'description'],
     links: (record: any) => {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/programs/${record.id}`, rel: 'program' },
+        self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.id}`, rel: 'program' },
       };
     },
     topLevelLinks: collectionLinks,
@@ -106,7 +109,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('programs', displayData, {
+  const serialized = serializer.serialize('programCollection', displayData, {
     page,
     pageSize,
     pages,

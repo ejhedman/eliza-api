@@ -22,8 +22,6 @@ export class SolutionDefQuery {
         return {
           id: program.id,
           displayName: program.displayName,
-          // _links: {
-          //   self: `${req.apiUrls.baseUrl}/programs/${program.id}` }
         };
       });
     }

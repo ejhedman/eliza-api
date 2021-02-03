@@ -2,7 +2,7 @@ import * as express from 'express';
 import { HALSerializer } from 'hal-serializer'
 import { ControllerBase } from './controllerBase';
 
-export class BaseController extends ControllerBase {
+export class ApiBaseController extends ControllerBase {
   public path;
   public router = express.Router();
 
