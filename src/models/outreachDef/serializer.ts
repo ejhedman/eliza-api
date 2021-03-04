@@ -1,4 +1,4 @@
-const HALSerializer = require( 'hal-serializer')
+const HALSerializer = require('hal-serializer');
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -19,7 +19,8 @@ export const serialize = (req: any, data: any) => {
           href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
           rel: 'program',
           title: data.programName,
-        },      };
+        },
+      };
     },
   });
 
@@ -75,7 +76,10 @@ export const serializeCollection = (req: any, data: any) => {
     whitelist: ['id', 'displayName', 'description'],
     links: (record: any) => {
       return {
-        self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.programId}/outreaches/${record.id}`, rel: 'outreach' },
+        self: {
+          href: `${baseUrl}/clients/${record.clientId}/programs/${record.programId}/outreaches/${record.id}`,
+          rel: 'outreach',
+        },
       };
     },
     topLevelLinks: collectionLinks,

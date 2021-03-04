@@ -43,7 +43,7 @@ export class EnrollmentCollectionController extends ControllerBase {
   }
 
   async getListAsync(req: any, res: any) {
-    const clientId = req.params.clientId
+    const clientId = req.params.clientId;
     const filter = req.query;
     const enrollments = await this.enrollmentRepository.getListAsync(clientId, filter);
     const serialized = Enrollment.serializeCollection(req, enrollments);

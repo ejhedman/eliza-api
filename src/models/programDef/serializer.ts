@@ -1,4 +1,4 @@
-const HALSerializer = require( 'hal-serializer')
+const HALSerializer = require('hal-serializer');
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -26,7 +26,9 @@ export const serialize = (req: any, data: any) => {
       return {
         self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.id}`, rel: 'program' },
         enrollments: { href: `${baseUrl}/clients/${record.clientId}/enrollments?programId=${record.id}` },
-        enrollmentOutreaches: { href: `${baseUrl}/clients/${record.clientId}/enrollmentOutreaches?programId=${record.id}` },
+        enrollmentOutreaches: {
+          href: `${baseUrl}/clients/${record.clientId}/enrollmentOutreaches?programId=${record.id}`,
+        },
         client: { href: `${baseUrl}/clients/${record.clientId}`, rel: 'client', title: data.clientName },
       };
     },

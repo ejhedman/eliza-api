@@ -16,7 +16,10 @@ export class EnrollmentOutreachQuery {
     const outreachDetail = await this.enrollmentOutreachRepository.getDetailAsync(clientId, enrollmentOutreachId);
 
     if (outreachDetail) {
-      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, enrollmentOutreachId);
+      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(
+        clientId,
+        enrollmentOutreachId,
+      );
 
       outreachDetail.outreachResults = outreachResults.map((outreachResult) => {
         return {

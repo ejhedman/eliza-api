@@ -25,7 +25,7 @@ export class ProgramDefQuery {
           programId: outreachDef.programId,
           programName: outreachDef.programName,
           clientId: outreachDef.clientId,
-          clientName: outreachDef.clientName
+          clientName: outreachDef.clientName,
         };
       });
     }

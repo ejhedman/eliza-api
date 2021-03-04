@@ -603,32 +603,36 @@ components:
             x-pii: true
           lineOfBusiness:
             type: string
-          allowedChannels:
-            type: object
-            properties:
-              telephone:
-                type: boolean
-              messaging:
-                type: boolean
-              email:
-                type: string
-          allowedContactDays:
-            type: object
-            properties:
-              monday:
-                type: boolean
-              tuesday:
-                type: boolean
-              wednesday:
-                type: boolean
-              thursday:
-                type: boolean
-              friday:
-                type: boolean
-              saturday:
-                type: boolean
-              sunday:
-                type: boolean
+          filter1:
+            type: string
+          filter2:
+            type: string
+          # allowedChannels:
+          #   type: object
+          #   properties:
+          #     telephone:
+          #       type: boolean
+          #     messaging:
+          #       type: boolean
+          #     email:
+          #       type: string
+          # allowedContactDays:
+          #   type: object
+          #   properties:
+          #     monday:
+          #       type: boolean
+          #     tuesday:
+          #       type: boolean
+          #     wednesday:
+          #       type: boolean
+          #     thursday:
+          #       type: boolean
+          #     friday:
+          #       type: boolean
+          #     saturday:
+          #       type: boolean
+          #     sunday:
+          #       type: boolean
           test:
             type: boolean
         additionalProperties:

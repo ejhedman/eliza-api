@@ -1,4 +1,4 @@
-const HALSerializer = require( 'hal-serializer')
+const HALSerializer = require('hal-serializer');
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -14,39 +14,41 @@ export const serialize = (req: any, data: any) => {
       'firstAttemptAt',
       'lastAttemptAt',
       'attempts',
-      'lastBestResult'
-],
+      'lastBestResult',
+    ],
     links: function (data: any) {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.id}`, rel: 'enrollmentOutreach' },
+        self: {
+          href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.id}`,
+          rel: 'enrollmentOutreach',
+        },
       };
     },
   });
 
   serializer.register('enrollmentDetail', {
     whitelist: [
-        'id',
-        'receivedAt',
-        'startedAt',
-        'completedAt',
-        'scubStatus',
-        'scrubReason',
-        'excluded',
-        'excludedAt',
-        'lastOutreachChannel',
-        'lastOutreachAt',
-        'lastOutreachResult',
-        'lastOutreachResultCategory',
+      'id',
+      'receivedAt',
+      'startedAt',
+      'completedAt',
+      'scubStatus',
+      'scrubReason',
+      'excluded',
+      'excludedAt',
+      'lastOutreachChannel',
+      'lastOutreachAt',
+      'lastOutreachResult',
+      'lastOutreachResultCategory',
 
-        'memberXid',
-        'transactionXid',
-        'groupXid',
-        'firstName',
-        'lastName',
-        'dob',
-        'gender',
-
-      ],
+      'memberXid',
+      'transactionXid',
+      'groupXid',
+      'firstName',
+      'lastName',
+      'dob',
+      'gender',
+    ],
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.id}`, rel: 'enrollment' },
@@ -54,7 +56,11 @@ export const serialize = (req: any, data: any) => {
           href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?enrollmentId=${data.id}`,
           rel: 'collection:enrollmentOutreaches',
         },
-        program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', title: data.programName },
+        program: {
+          href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+          rel: 'program',
+          title: data.programName,
+        },
       };
     },
     embedded: {
@@ -132,7 +138,6 @@ export const serializeCollection = (req: any, data: any) => {
       'lastName',
       'dob',
       'gender',
-
     ],
     links: function (data: any) {
       return {

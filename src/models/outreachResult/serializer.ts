@@ -1,4 +1,4 @@
-const HALSerializer = require( 'hal-serializer')
+const HALSerializer = require('hal-serializer');
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -6,15 +6,7 @@ export const serialize = (req: any, data: any) => {
   const serializer = new HALSerializer();
 
   serializer.register('outreachResultDetail', {
-    whitelist: [
-      'id',
-      'channel',
-      'outreachAt',
-      'outreachResultCategory',
-      'outreachResult',
-      'isLastBest',
-      'responses',
-    ],
+    whitelist: ['id', 'channel', 'outreachAt', 'outreachResultCategory', 'outreachResult', 'isLastBest', 'responses'],
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/outreachResults/${data.id}`, rel: 'outreachResult' },
@@ -44,9 +36,8 @@ export const serializeCollection = (req: any, data: any) => {
   const total = data.length;
 
   if (data.length > 0) {
-    data.clientId = data[0].clientId
+    data.clientId = data[0].clientId;
   }
-
 
   let page = parseInt(req.query.page || '1');
   if (page <= 1) {
@@ -87,19 +78,21 @@ export const serializeCollection = (req: any, data: any) => {
   const serializer = new HALSerializer();
 
   serializer.register('outreachResultColletion', {
-    whitelist: [
-      'channel',
-      'outreachAt',
-      'outreachResultCategory',
-      'outreachResult',
-      'isLastBest',
-      'responses',
-    ],
+    whitelist: ['channel', 'outreachAt', 'outreachResultCategory', 'outreachResult', 'isLastBest', 'responses'],
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/outreachResults/${data.id}`, rel: 'outreachResult' },
-        program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
-        enrollmentOutreach: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`, rel: 'enrollmentOutreach', id: data.enrollmentOutreachId },
+        program: {
+          href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+          rel: 'program',
+          id: data.programId,
+          title: data.programName,
+        },
+        enrollmentOutreach: {
+          href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`,
+          rel: 'enrollmentOutreach',
+          id: data.enrollmentOutreachId,
+        },
       };
     },
     topLevelLinks: collectionLinks,

@@ -13,22 +13,20 @@ export class OutreachDefRepository {
     );
 
     if (filter) {
-
       for (const filterParm in filter) {
         if (Array.isArray(filter[filterParm])) {
-            const filterValues = filter[filterParm]
-            entityCollectionRef = entityCollectionRef.where(filterParm, 'in', filterValues)
+          const filterValues = filter[filterParm];
+          entityCollectionRef = entityCollectionRef.where(filterParm, 'in', filterValues);
         } else {
-            const filterValue = filter[filterParm]
-            entityCollectionRef = entityCollectionRef.where(filterParm, '==', filterValue)
+          const filterValue = filter[filterParm];
+          entityCollectionRef = entityCollectionRef.where(filterParm, '==', filterValue);
         }
       }
-
     }
 
     // always filter on client
-    entityCollectionRef = entityCollectionRef.where('clientId', '==', clientId)
-    entityCollectionRef = entityCollectionRef.where('programId', '==', programId)
+    entityCollectionRef = entityCollectionRef.where('clientId', '==', clientId);
+    entityCollectionRef = entityCollectionRef.where('programId', '==', programId);
 
     const entityRefCollection = await entityCollectionRef.get();
     const entityList = entityRefCollection.docs.map((entityDoc) => {

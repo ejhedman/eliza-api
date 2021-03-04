@@ -1,4 +1,4 @@
-const HALSerializer = require( 'hal-serializer')
+const HALSerializer = require('hal-serializer');
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
