@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { SolutionDef } from '../models/solutionDef';
 import { SolutionDefRepository } from '../repositories/solutionDefRepository';
 import { SolutionDefQuery } from '../services/solutionDefQuery';

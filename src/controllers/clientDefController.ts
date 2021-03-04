@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { ClientDef } from '../models/clientDef';
 import { ClientDefRepository } from '../repositories/clientDefRepository';
 import { ClientDefQuery } from '../services/clientDefQuery';
@@ -46,7 +45,6 @@ export class ClientDefController extends ControllerBase {
   async getListAsync(req: any, res: any) {
     const clients = await this.clientDefRepository.getListAsync();
     const serialized = ClientDef.serializeCollection(req, clients);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }
@@ -55,7 +53,6 @@ export class ClientDefController extends ControllerBase {
     const clientId = req.params.id;
     const client = await this.clientQuery.getDetailAsync(clientId, req);
     const serialized = ClientDef.serialize(req, client);
-    // serialized.data.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

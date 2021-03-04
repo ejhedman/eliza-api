@@ -1,4 +1,4 @@
-import { HALSerializer } from 'hal-serializer'
+const HALSerializer = require( 'hal-serializer')
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -21,15 +21,6 @@ export const serialize = (req: any, data: any) => {
           title: data.programName,
         },      };
     },
-    // associations: function (record: any) {
-    //   return {
-    //     program: {
-    //       href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
-    //       rel: 'program',
-    //       title: data.programName,
-    //     },
-      // };
-    // },
   });
 
   const serialized = serializer.serialize('outreahDef', data);

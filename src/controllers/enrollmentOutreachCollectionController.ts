@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { EnrollmentOutreach } from '../models/enrollmentOutreach';
 import { EnrollmentOutreachRepository } from '../repositories/enrollmentOutreachRepository';
 import { EnrollmentOutreachQuery } from '../services/enrollmentOutreachQuery';
@@ -48,7 +47,6 @@ export class EnrollmentOutreachCollectionController extends ControllerBase {
     const filter = req.query;
     const enrollmentOutreaches = await this.outreachRepository.getListAsync(clientId, filter);
     const serialized = EnrollmentOutreach.serializeCollection(req, enrollmentOutreaches);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

@@ -1,4 +1,4 @@
-import { HALSerializer } from 'hal-serializer'
+const HALSerializer = require( 'hal-serializer')
 
 export const serialize = (req: any, data: any) => {
   const baseUrl = req.apiUrls.baseUrl;
@@ -6,10 +6,9 @@ export const serialize = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  // EJH: HACK
+  // HARDCODE
   if (data) {
     data.isTransactional = false;
-
   }
 
   serializer.register('outreachDef', {
@@ -31,11 +30,6 @@ export const serialize = (req: any, data: any) => {
         client: { href: `${baseUrl}/clients/${record.clientId}`, rel: 'client', title: data.clientName },
       };
     },
-    // associations: function (record: any) {
-    //   return {
-    //     client: { href: `${baseUrl}/clients/${record.clientId}`, rel: 'client', title: data.clientName },
-    //   };
-    // },
     embedded: {
       outreaches: {
         type: 'outreachDef',

@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { ProgramDef } from '../models/programDef';
 import { ProgramDefRepository } from '../repositories/programDefRepository';
 import { ProgramDefQuery } from '../services/programDefQuery';
@@ -48,7 +47,6 @@ export class ProgramDefController extends ControllerBase {
     const filter = req.query;
     const programs = await this.programRepository.getListAsync(clientId, filter);
     const serialized = ProgramDef.serializeCollection(req, programs);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

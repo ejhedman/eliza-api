@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { OutreachDef } from '../models/outreachDef';
 import { OutreachDefRepository } from '../repositories/outreachDefRepository';
 import { OutreachDefQuery } from '../services/outreachDefQuery';

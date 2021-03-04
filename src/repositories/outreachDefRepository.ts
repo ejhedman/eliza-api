@@ -65,14 +65,13 @@ export class OutreachDefRepository {
     const id = entity.id;
     const bookId = entity.bookId;
 
-    const orderBookRef = this.db.collection(COLLECTION_NAME).doc(id);
-    const orderBookDoc = await orderBookRef.get();
-    if (!orderBookDoc.exists) {
-      // if there's no orderbook, create an empty one to hold the orders
-      await orderBookRef.set({ id });
+    const entityRef = this.db.collection(COLLECTION_NAME).doc(id);
+    const entityDoc = await entityRef.get();
+    if (!entityDoc.exists) {
+      await entityRef.set({ id });
     }
 
-    await orderBookRef.collection('orders').doc(bookId).set(entityJson);
+    await entityRef.collection('orders').doc(bookId).set(entityJson);
   }
 
   async patchAsync(id: string, entityJson: any) {

@@ -29,7 +29,6 @@ export class EnrollmentQuery {
           clientId: enrollmentOutreach.clientId,
           clientName: enrollmentOutreach.clientName,
           memberXid: enrollmentOutreach.memberXid,
-          // batchId: out reach.batchId,
 
           channel: enrollmentOutreach.channel,
           outreachStatus: enrollmentOutreach.outreachStatus,

@@ -27,7 +27,6 @@ export class App {
     if (firebase.apps.length === 0) {
       firebase.initializeApp({
         credential: firebase.credential.cert(serviceAccount),
-        //databaseURL: 'https://hedbot.firebaseio.com',
       });
     }
 

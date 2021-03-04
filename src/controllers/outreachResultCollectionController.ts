@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { OutreachResult } from '../models/outreachResult';
 import { OutreachResultRepository } from '../repositories/outreachResultRepository';
 import { OutreachResultQuery } from '../services/outreachResultQuery';
@@ -48,7 +47,6 @@ export class OutreachResultCollectionController extends ControllerBase {
     const filter = req.query;
     const outreachResultes = await this.outreachResultRepository.getListAsync(clientId, filter);
     const serialized = OutreachResult.serializeCollection(req, outreachResultes);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

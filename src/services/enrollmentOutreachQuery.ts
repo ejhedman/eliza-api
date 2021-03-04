@@ -15,7 +15,6 @@ export class EnrollmentOutreachQuery {
   async getDetailAsync(clientId: string, enrollmentOutreachId: string, req: any) {
     const outreachDetail = await this.enrollmentOutreachRepository.getDetailAsync(clientId, enrollmentOutreachId);
 
-    // ?? not sure if want this. list will be too big. not appropriate to embed
     if (outreachDetail) {
       const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, enrollmentOutreachId);
 

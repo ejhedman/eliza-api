@@ -53,8 +53,6 @@ export const handleEventError = async (error: any, req: any, res: any, logger: a
           source: { url: selfUrl },
         },
       ],
-      // EJH: Add payload to http error of figure out if this is used.
-      // "payload": error.payload
     };
   } else {
     errorResponse = {
@@ -71,7 +69,6 @@ export const handleEventError = async (error: any, req: any, res: any, logger: a
     };
   }
 
-  // default to "no retry" return code
   const statusCode = 202;
   logger && logger.error(`Error: ${JSON.stringify(errorResponse)}`);
 

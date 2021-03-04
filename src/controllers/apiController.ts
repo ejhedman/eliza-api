@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { HALSerializer } from 'hal-serializer'
+const HALSerializer = require( 'hal-serializer')
 import { ControllerBase } from './controllerBase';
 
 export class APIController extends ControllerBase {

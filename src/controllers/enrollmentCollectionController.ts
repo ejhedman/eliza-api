@@ -1,5 +1,4 @@
 import * as express from 'express';
-// import { Request, Response } from 'express'
 import { Enrollment } from '../models/enrollment';
 import { EnrollmentRepository } from '../repositories/enrollmentRepository';
 import { EnrollmentQuery } from '../services/enrollmentQuery';
@@ -48,7 +47,6 @@ export class EnrollmentCollectionController extends ControllerBase {
     const filter = req.query;
     const enrollments = await this.enrollmentRepository.getListAsync(clientId, filter);
     const serialized = Enrollment.serializeCollection(req, enrollments);
-    // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }
