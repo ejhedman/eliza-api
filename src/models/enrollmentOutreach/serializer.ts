@@ -22,10 +22,10 @@ export const serialize = (req: any, data: any) => {
     },
   });
 
-  serializer.register('outreachAttemptDetail', {
+  serializer.register('enrollmentOutreachDetail', {
     whitelist: [
                   'id',
-                  'displayName',
+                  'outreachName',
                   'outreachTag',
                   'channel',
                   'outreachStatus',
@@ -36,18 +36,28 @@ export const serialize = (req: any, data: any) => {
                 ],
     links: function (data: any) {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.id}`, rel: 'outreach' },
-      };
-    },
-    associations: function (data: any) {
-      return {
+        self: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.id}`, rel: 'outreach' },
         program: {
           href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
           rel: 'program',
           title: data.programName,
         },
+        outreach: {
+          href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}/outreaches/${data.outreachId}`,
+          rel: 'program',
+          title: data.outreachName,
+        },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     program: {
+    //       href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+    //       rel: 'program',
+    //       title: data.programName,
+    //     },
+    //   };
+    // },
     embedded: {
       outreachResults: {
         type: 'outreachResultSummary',
@@ -55,7 +65,7 @@ export const serialize = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('outreachAttemptDetail', data);
+  const serialized = serializer.serialize('enrollmentOutreachDetail', data);
   return serialized;
 };
 
@@ -77,36 +87,36 @@ export const serializeCollection = (req: any, data: any) => {
   const displayCount = displayData.length;
 
   const collectionLinks: any = {
-    self: { href: `${selfUrl}`, rel: 'collection:outreachAttempts' },
+    self: { href: `${selfUrl}`, rel: 'collection:enrollmentOutreaches' },
   };
 
   if (total > pageSize) {
     collectionLinks.first = {
-      href: `${baseUrl}/clients/${data.clientId}/outreachAttempts`,
+      href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches`,
     };
     if (page > 1) {
       collectionLinks.prev = {
-        href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?page=${page - 1}`,
+        href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?page=${page - 1}`,
       };
     }
     if (page < pages) {
       collectionLinks.next = {
-        href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?page=${page + 1}`,
+        href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?page=${page + 1}`,
       };
     }
     if (page <= pages) {
       collectionLinks.last = {
-        href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?page=${pages}`,
+        href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?page=${pages}`,
       };
     }
   }
 
   const serializer = new HALSerializer();
 
-  serializer.register('outreachAttemptCollection', {
+  serializer.register('enrollmentOutreachCollection', {
     whitelist: [
                 'id',
-                'displayName',
+                'outreachName',
                 'channel',
                 'outreachStatus',
                 'firstAttemptAt',
@@ -116,16 +126,19 @@ export const serializeCollection = (req: any, data: any) => {
                 ],
     links: function (data: any) {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.id}`, rel: 'outreachAttempt' },
-      };
-    },
-    associations: function (data: any) {
-      return {
+        self: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.id}`, rel: 'enrollmentOutreach' },
         program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
         outreach: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}/outreaches/${data.outreachId}`, rel: 'program', id: data.outreachId, title: data.outreachName },
         enrollment: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.enrollmentId}`, rel: 'enrollment', id: data.enrollmentId, title: data.displayName },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
+    //     outreach: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}/outreaches/${data.outreachId}`, rel: 'program', id: data.outreachId, title: data.outreachName },
+    //     enrollment: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.enrollmentId}`, rel: 'enrollment', id: data.enrollmentId, title: data.displayName },
+    //   };
+    // },
     topLevelLinks: collectionLinks,
     topLevelMeta: function (extraOptions: any) {
       return {
@@ -138,7 +151,7 @@ export const serializeCollection = (req: any, data: any) => {
     },
   });
 
-  const serialized = serializer.serialize('outreachAttemptCollection', displayData, {
+  const serialized = serializer.serialize('enrollmentOutreachCollection', displayData, {
     page: page,
     pageSize: pageSize,
     pages: pages,

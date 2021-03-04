@@ -1,23 +1,23 @@
-import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
+import { EnrollmentOutreachRepository } from '../repositories/enrollmentOutreachRepository';
 import { OutreachResultRepository } from '../repositories/outreachResultRepository';
 
-export class OutreachAttemptQuery {
+export class EnrollmentOutreachQuery {
   db: FirebaseFirestore.Firestore;
-  outreachAttemptRepository: OutreachAttemptRepository;
+  enrollmentOutreachRepository: EnrollmentOutreachRepository;
   outreachResultRepository: OutreachResultRepository;
 
   constructor(db: FirebaseFirestore.Firestore) {
     this.db = db;
-    this.outreachAttemptRepository = new OutreachAttemptRepository(db);
+    this.enrollmentOutreachRepository = new EnrollmentOutreachRepository(db);
     this.outreachResultRepository = new OutreachResultRepository(db);
   }
 
-  async getDetailAsync(clientId: string, outreachAttemptId: string, req: any) {
-    const outreachDetail = await this.outreachAttemptRepository.getDetailAsync(clientId, outreachAttemptId);
+  async getDetailAsync(clientId: string, enrollmentOutreachId: string, req: any) {
+    const outreachDetail = await this.enrollmentOutreachRepository.getDetailAsync(clientId, enrollmentOutreachId);
 
     // ?? not sure if want this. list will be too big. not appropriate to embed
     if (outreachDetail) {
-      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, outreachAttemptId);
+      const outreachResults = await this.outreachResultRepository.getListForOutreachAsync(clientId, enrollmentOutreachId);
 
       outreachDetail.outreachResults = outreachResults.map((outreachResult) => {
         return {
@@ -25,6 +25,8 @@ export class OutreachAttemptQuery {
 
           clientId: outreachResult.clientId,
           clientName: outreachResult.clientName,
+          outreachId: outreachResult.outreachId,
+          outreachName: outreachResult.outreachName,
           programId: outreachResult.programId,
           programName: outreachResult.programName,
           solutionId: outreachResult.solutionId,

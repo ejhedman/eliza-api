@@ -11,21 +11,25 @@ export const serialize = (req: any, data: any) => {
     links: function (record: any) {
       return {
         self: { href: `${selfUrl}`, rel: 'outreach' },
-        outreachAttempts: {
-          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?outreachId=${data.id}`,
+        enrollmentOutreaches: {
+          href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?outreachId=${data.id}`,
           rel: 'collection:outreachResults',
         },
-      };
-    },
-    associations: function (record: any) {
-      return {
         program: {
           href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
           rel: 'program',
           title: data.programName,
-        },
-      };
+        },      };
     },
+    // associations: function (record: any) {
+    //   return {
+    //     program: {
+    //       href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+    //       rel: 'program',
+    //       title: data.programName,
+    //     },
+      // };
+    // },
   });
 
   const serialized = serializer.serialize('outreahDef', data);

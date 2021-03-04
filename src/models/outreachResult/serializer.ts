@@ -18,23 +18,34 @@ export const serialize = (req: any, data: any) => {
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/outreachResults/${data.id}`, rel: 'outreachResult' },
-      };
-    },
-    associations: function (data: any) {
-      return {
         program: {
           href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
           rel: 'program',
           id: data.programId,
           title: data.programName,
         },
-        outreachAttempt: {
-          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.outreachAttemptId}`,
-          rel: 'outreachAttempt',
-          id: data.outreachAttemptId,
+        enrollmentOutreach: {
+          href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`,
+          rel: 'enrollmentOutreach',
+          id: data.enrollmentOutreachId,
         },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     // program: {
+    //     //   href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+    //     //   rel: 'program',
+    //     //   id: data.programId,
+    //     //   title: data.programName,
+    //     // },
+    //     // enrollmentOutreach: {
+    //     //   href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`,
+    //     //   rel: 'enrollmentOutreach',
+    //     //   id: data.enrollmentOutreachId,
+    //     // },
+    //   };
+    // },
   });
 
   const serialized = serializer.serialize('outreachResultDetail', data);
@@ -102,14 +113,16 @@ export const serializeCollection = (req: any, data: any) => {
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/outreachResults/${data.id}`, rel: 'outreachResult' },
-      };
-    },
-    associations: function (data: any) {
-      return {
         program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
-        outreachAttempt: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.outreachAttemptId}`, rel: 'outreachAttempt', id: data.outreachAttemptId },
+        enrollmentOutreach: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`, rel: 'enrollmentOutreach', id: data.enrollmentOutreachId },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', id: data.programId, title: data.programName },
+    //     enrollmentOutreach: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.enrollmentOutreachId}`, rel: 'enrollmentOutreach', id: data.enrollmentOutreachId },
+    //   };
+    // },
     topLevelLinks: collectionLinks,
     topLevelMeta: function (extraOptions: any) {
       return {

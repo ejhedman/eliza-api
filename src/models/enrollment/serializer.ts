@@ -5,7 +5,7 @@ export const serialize = (req: any, data: any) => {
 
   const serializer = new HALSerializer();
 
-  serializer.register('outreachAttemptSummary', {
+  serializer.register('enrollmentOutreachSummary', {
     whitelist: [
       'id',
       'displayName',
@@ -18,7 +18,7 @@ export const serialize = (req: any, data: any) => {
 ],
     links: function (data: any) {
       return {
-        self: { href: `${baseUrl}/clients/${data.clientId}/outreachAttempts/${data.id}`, rel: 'outreachAttempt' },
+        self: { href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches/${data.id}`, rel: 'enrollmentOutreach' },
       };
     },
   });
@@ -63,20 +63,21 @@ export const serialize = (req: any, data: any) => {
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.id}`, rel: 'enrollment' },
-        outreachAttempts: {
-          href: `${baseUrl}/clients/${data.clientId}/outreachAttempts?enrollmentId=${data.id}`,
-          rel: 'collection:outreachAttempts',
+        enrollmentOutreaches: {
+          href: `${baseUrl}/clients/${data.clientId}/enrollmentOutreaches?enrollmentId=${data.id}`,
+          rel: 'collection:enrollmentOutreaches',
         },
-      };
-    },
-    associations: function (data: any) {
-      return {
         program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', title: data.programName },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     program: { href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`, rel: 'program', title: data.programName },
+    //   };
+    // },
     embedded: {
-      outreachAttempts: {
-        type: 'outreachAttemptSummary',
+      enrollmentOutreaches: {
+        type: 'enrollmentOutreachSummary',
       },
     },
   });
@@ -154,10 +155,6 @@ export const serializeCollection = (req: any, data: any) => {
     links: function (data: any) {
       return {
         self: { href: `${baseUrl}/clients/${data.clientId}/enrollments/${data.id}`, rel: 'enrollment' },
-      };
-    },
-    associations: function (data: any) {
-      return {
         program: {
           href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
           rel: 'program',
@@ -165,6 +162,15 @@ export const serializeCollection = (req: any, data: any) => {
         },
       };
     },
+    // associations: function (data: any) {
+    //   return {
+    //     program: {
+    //       href: `${baseUrl}/clients/${data.clientId}/programs/${data.programId}`,
+    //       rel: 'program',
+    //       title: data.programName,
+    //     },
+    //   };
+    // },
     topLevelLinks: collectionLinks,
     topLevelMeta: function (extraOptions: any) {
       return {

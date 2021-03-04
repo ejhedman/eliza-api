@@ -8,7 +8,7 @@ import { SolutionDefController } from './solutionDefController';
 import { ProgramDefController } from './programDefController';
 import { OutreachDefController } from './outreachDefController';
 import { EnrollmentCollectionController } from './enrollmentCollectionController';
-import { OutreachAttemptCollectionController } from './outreachAttemptCollectionController';
+import { EnrollmentOutreachCollectionController } from './enrollmentOutreachCollectionController';
 import { OutreachResultCollectionController } from './outreachResultCollectionController';
 
 export const initControllers = (baseUrl: string, app: express.Application, db: FirebaseFirestore.Firestore) => {
@@ -20,7 +20,7 @@ export const initControllers = (baseUrl: string, app: express.Application, db: F
     new ProgramDefController('/clients/:clientId/programs', db),
     new OutreachDefController('/clients/:clientId/programs/:programId/outreaches', db),
 
-    new OutreachAttemptCollectionController('/clients/:clientId/outreachAttempts', db),
+    new EnrollmentOutreachCollectionController('/clients/:clientId/enrollmentOutreaches', db),
     new OutreachResultCollectionController('/clients/:clientId/outreachResults', db),
     new EnrollmentCollectionController('/clients/:clientId/enrollments', db),
   ];

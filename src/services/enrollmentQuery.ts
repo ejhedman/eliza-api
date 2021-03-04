@@ -1,15 +1,15 @@
 import { EnrollmentRepository } from '../repositories/enrollmentRepository';
-import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
+import { EnrollmentOutreachRepository } from '../repositories/enrollmentOutreachRepository';
 
 export class EnrollmentQuery {
   db: FirebaseFirestore.Firestore;
   enrollmentRepository: EnrollmentRepository;
-  outreachRepository: OutreachAttemptRepository;
+  outreachRepository: EnrollmentOutreachRepository;
 
   constructor(db: FirebaseFirestore.Firestore) {
     this.db = db;
     this.enrollmentRepository = new EnrollmentRepository(db);
-    this.outreachRepository = new OutreachAttemptRepository(db);
+    this.outreachRepository = new EnrollmentOutreachRepository(db);
   }
 
   async getDetailAsync(clientId: string, id: string, req: any) {
@@ -17,25 +17,26 @@ export class EnrollmentQuery {
 
     if (enrollmentDetail) {
       const outreachList = await this.outreachRepository.getListForEnrollmentAsync(clientId, id);
-      enrollmentDetail.outreachAttempts = outreachList.map((outreachAttempt) => {
+      enrollmentDetail.enrollmentOutreaches = outreachList.map((enrollmentOutreach) => {
         return {
-          id: outreachAttempt.id,
-          displayName: outreachAttempt.displayName,
-          programId: outreachAttempt.programId,
-          programName: outreachAttempt.programName,
-          solutionId: outreachAttempt.solutionId,
-          solutionName: outreachAttempt.solutionName,
-          clientId: outreachAttempt.clientId,
-          clientName: outreachAttempt.clientName,
-          memberXid: outreachAttempt.memberXid,
+          id: enrollmentOutreach.id,
+          outreachId: enrollmentOutreach.outreachId,
+          outreachName: enrollmentOutreach.outreachName,
+          programId: enrollmentOutreach.programId,
+          programName: enrollmentOutreach.programName,
+          solutionId: enrollmentOutreach.solutionId,
+          solutionName: enrollmentOutreach.solutionName,
+          clientId: enrollmentOutreach.clientId,
+          clientName: enrollmentOutreach.clientName,
+          memberXid: enrollmentOutreach.memberXid,
           // batchId: out reach.batchId,
 
-          channel: outreachAttempt.channel,
-          outreachStatus: outreachAttempt.outreachStatus,
-          firstAttemptAt: outreachAttempt.firstAttemptAt,
-          lastAttemptAt: outreachAttempt.lastAttemptAt,
-          attempts: outreachAttempt.attempts,
-          lastBestResult: outreachAttempt.lastBestResult,
+          channel: enrollmentOutreach.channel,
+          outreachStatus: enrollmentOutreach.outreachStatus,
+          firstAttemptAt: enrollmentOutreach.firstAttemptAt,
+          lastAttemptAt: enrollmentOutreach.lastAttemptAt,
+          attempts: enrollmentOutreach.attempts,
+          lastBestResult: enrollmentOutreach.lastBestResult,
         };
       });
     }

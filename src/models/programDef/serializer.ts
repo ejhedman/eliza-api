@@ -27,14 +27,15 @@ export const serialize = (req: any, data: any) => {
       return {
         self: { href: `${baseUrl}/clients/${record.clientId}/programs/${record.id}`, rel: 'program' },
         enrollments: { href: `${baseUrl}/clients/${record.clientId}/enrollments?programId=${record.id}` },
-        outreachAttempts: { href: `${baseUrl}/clients/${record.clientId}/outreachAttempts?programId=${record.id}` },
-      };
-    },
-    associations: function (record: any) {
-      return {
+        enrollmentOutreaches: { href: `${baseUrl}/clients/${record.clientId}/enrollmentOutreaches?programId=${record.id}` },
         client: { href: `${baseUrl}/clients/${record.clientId}`, rel: 'client', title: data.clientName },
       };
     },
+    // associations: function (record: any) {
+    //   return {
+    //     client: { href: `${baseUrl}/clients/${record.clientId}`, rel: 'client', title: data.clientName },
+    //   };
+    // },
     embedded: {
       outreaches: {
         type: 'outreachDef',

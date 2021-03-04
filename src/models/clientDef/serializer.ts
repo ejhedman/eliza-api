@@ -20,7 +20,7 @@ export const serialize = (req: any, data: any) => {
       return {
         self: { href: `${baseUrl}/clients/${data.id}`, rel: 'client' },
         enrollments: { href: `${baseUrl}/clients/${data.id}/enrollments` },
-        outreachAttempts: { href: `${baseUrl}/clients/${data.id}/outreachAttempts` },
+        enrollmentOutreaches: { href: `${baseUrl}/clients/${data.id}/enrollmentOutreaches` },
       };
     },
     embedded: {

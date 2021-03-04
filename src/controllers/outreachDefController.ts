@@ -47,8 +47,8 @@ export class OutreachDefController extends ControllerBase {
     const clientId = req.params.clientId;
     const programId = req.params.programId;
     const filter = req.query;
-    const outreachAttempts = await this.outreachDefRepository.getListAsync(clientId, programId, filter);
-    const serialized = OutreachDef.serializeCollection(req, outreachAttempts);
+    const enrollmentOutreaches = await this.outreachDefRepository.getListAsync(clientId, programId, filter);
+    const serialized = OutreachDef.serializeCollection(req, enrollmentOutreaches);
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

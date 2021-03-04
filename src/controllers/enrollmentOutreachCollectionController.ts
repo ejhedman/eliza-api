@@ -1,24 +1,24 @@
 import * as express from 'express';
 // import { Request, Response } from 'express'
-import { OutreachAttempt } from '../models/outreachAttempt';
-import { OutreachAttemptRepository } from '../repositories/outreachAttemptRepository';
-import { OutreachAttemptQuery } from '../services/outreachAttemptQuery';
+import { EnrollmentOutreach } from '../models/enrollmentOutreach';
+import { EnrollmentOutreachRepository } from '../repositories/enrollmentOutreachRepository';
+import { EnrollmentOutreachQuery } from '../services/enrollmentOutreachQuery';
 import { ControllerBase } from './controllerBase';
 
-export class OutreachAttemptCollectionController extends ControllerBase {
+export class EnrollmentOutreachCollectionController extends ControllerBase {
   public path;
   public router = express.Router();
 
   db: FirebaseFirestore.Firestore;
-  outreachRepository: OutreachAttemptRepository;
-  outreachAttemptQuery: OutreachAttemptQuery;
+  outreachRepository: EnrollmentOutreachRepository;
+  enrollmentOutreachQuery: EnrollmentOutreachQuery;
 
   constructor(path: string, db: FirebaseFirestore.Firestore) {
     super();
     this.path = path;
     this.db = db;
-    this.outreachRepository = new OutreachAttemptRepository(db);
-    this.outreachAttemptQuery = new OutreachAttemptQuery(db);
+    this.outreachRepository = new EnrollmentOutreachRepository(db);
+    this.enrollmentOutreachQuery = new EnrollmentOutreachQuery(db);
     this.intializeRoutes();
   }
 
@@ -32,7 +32,7 @@ export class OutreachAttemptCollectionController extends ControllerBase {
       }
     });
 
-    // list the outreachAttempt for given symbol
+    // list the enrollmentOutreach for given symbol
     this.router.get(`${this.path}/:id`, async (req, res, next) => {
       try {
         await this.getDetailAsync(req, res);
@@ -46,8 +46,8 @@ export class OutreachAttemptCollectionController extends ControllerBase {
   async getListAsync(req: any, res: any) {
     const clientId = req.params.clientId;
     const filter = req.query;
-    const outreachAttempts = await this.outreachRepository.getListAsync(clientId, filter);
-    const serialized = OutreachAttempt.serializeCollection(req, outreachAttempts);
+    const enrollmentOutreaches = await this.outreachRepository.getListAsync(clientId, filter);
+    const serialized = EnrollmentOutreach.serializeCollection(req, enrollmentOutreaches);
     // serialized.links.home = `${req.apiUrls.baseUrl}`;
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
@@ -55,9 +55,9 @@ export class OutreachAttemptCollectionController extends ControllerBase {
 
   async getDetailAsync(req: any, res: any) {
     const clientId = req.params.clientId;
-    const outreachAttemptId = req.params.id;
-    const outreachAttempt = await this.outreachAttemptQuery.getDetailAsync(clientId, outreachAttemptId, req);
-    const serialized = OutreachAttempt.serialize(req, outreachAttempt);
+    const enrollmentOutreachId = req.params.id;
+    const enrollmentOutreach = await this.enrollmentOutreachQuery.getDetailAsync(clientId, enrollmentOutreachId, req);
+    const serialized = EnrollmentOutreach.serialize(req, enrollmentOutreach);
     res.setHeader('Content-type', 'application/json');
     res.status(200).send(serialized);
   }

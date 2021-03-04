@@ -1,6 +1,6 @@
-const COLLECTION_NAME = 'outreachAttempts';
+const COLLECTION_NAME = 'enrollmentOutreaches';
 
-export class OutreachAttemptRepository {
+export class EnrollmentOutreachRepository {
   db: FirebaseFirestore.Firestore;
 
   constructor(db: FirebaseFirestore.Firestore) {
